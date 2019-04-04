@@ -1,0 +1,16 @@
+{
+	"pathsData" : [
+		{
+			"name" : "ForestPrefabs",
+			"path" : "Prefabs/Map/Forest/"
+		},
+		{
+			"name" : "GrassPrefabs",
+			"path" : "Prefabs/Map/Grass/"
+		},
+		{
+			"name" : "RoadsPrefabs",
+			"path" : "Prefabs/Map/Roads/"
+		}
+	]
+}
