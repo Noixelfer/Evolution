@@ -1,20 +1,32 @@
-﻿using UnityEngine;
+﻿using Evolution.Map;
+using UnityEngine;
 
 //Singleton
-public class Game : MonoBehaviour
+namespace Evolution
 {
-	private static Game gameInstance;
-
-	public static Game Instance
+	public class Game : MonoBehaviour
 	{
-		get
+		private static Game gameInstance;
+
+		public static Game Instance
 		{
-			if (gameInstance == null)
+			get
 			{
-				var container = new GameObject("Game");
-				gameInstance = container.AddComponent<Game>();
+				if (gameInstance == null)
+				{
+					var container = new GameObject("Game");
+					gameInstance = container.AddComponent<Game>();
+				}
+				return gameInstance;
 			}
-			return gameInstance;
+		}
+
+		public MapManager MapManager;
+		public PrefabsManager PrefabsManager;
+		private void Awake()
+		{
+			//MapManager = gameObject.AddComponent<MapManager>();
+			PrefabsManager = new PrefabsManager();
 		}
 	}
 }
