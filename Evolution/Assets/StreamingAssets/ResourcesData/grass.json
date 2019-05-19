@@ -2,19 +2,19 @@
 	"resourcesData" : [
 		{
 			"name" : "grass_01",
-			"spawnChance" : 25
+			"spawnChance" : 60
 		},
 		{
 			"name" : "grass_02",
-			"spawnChance" : 15
+			"spawnChance" : 44
 		},
 		{
 			"name" : "grass_03",
-			"spawnChance" : 17
+			"spawnChance" : 26
 		},
 		{
 			"name" : "grass_04",
-			"spawnChance" : 4
+			"spawnChance" : 7
 		},
 		{
 			"name" : "grass_05",
@@ -26,7 +26,7 @@
 		},
 		{
 			"name" : "grass_07",
-			"spawnChance" : 3
+			"spawnChance" : 1
 		},
 		{
 			"name" : "grass_08",
