@@ -1,0 +1,48 @@
+{
+	"resourcesData" : [
+		{
+			"name" : "grass_01",
+			"spawnChance" : 25
+		},
+		{
+			"name" : "grass_02",
+			"spawnChance" : 15
+		},
+		{
+			"name" : "grass_03",
+			"spawnChance" : 17
+		},
+		{
+			"name" : "grass_04",
+			"spawnChance" : 4
+		},
+		{
+			"name" : "grass_05",
+			"spawnChance" : 2
+		},
+		{
+			"name" : "grass_06",
+			"spawnChance" : 1
+		},
+		{
+			"name" : "grass_07",
+			"spawnChance" : 3
+		},
+		{
+			"name" : "grass_08",
+			"spawnChance" : 1
+		},
+		{
+			"name" : "grass_09",
+			"spawnChance" : 1
+		},
+		{
+			"name" : "grass_10",
+			"spawnChance" : 1
+		},
+		{
+			"name" : "grass_11",
+			"spawnChance" : 1
+		}
+	]
+}
