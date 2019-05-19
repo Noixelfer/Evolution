@@ -5,10 +5,17 @@ namespace Evolution.Map
 	public class MapManager : MonoBehaviour
 	{
 		public Map Map;
-		public float treeNoiseScale = 18;
-		public float treeMinValue = 0.5f;
-
+		//Water Ponds
+		public float waterPondsNoiseScale = 5;
+		[Range(0, 1)]
+		public float WaterPondsMinValue = 0.74f;
+		//Trees
+		public float treesNoiseScale = 18;
+		[Range(0, 1)]
+		public float treesMinValue = 0.5f;
+		//Rocks
 		public float rockNoiseScale = 5;
+		[Range(0, 1)]
 		public float rockMinValue = 0.5f;
 
 		private GameObject mapContainer;
@@ -21,8 +28,10 @@ namespace Evolution.Map
 
 			Map.Size = new Vector2(width, height);
 			GenerateEmptyMap();
-			//GenerateResourceFromNoise(treeNoiseScale, treeMinValue, "trunk_object_08");
-			//GenerateResourceFromNoise(rockNoiseScale, rockMinValue, "stone_object_09");
+			//GenerateWaterPonds
+			//GenerateResourceFromNoise(waterPondsNoiseScale, WaterPondsMinValue, "water");
+			//GenerateResourceFromNoise(treesNoiseScale, treesMinValue, "tree_object_08");
+			GenerateResourceFromNoise(rockNoiseScale, rockMinValue, "stones.json");
 		}
 
 		private float[,] GetNoiseMap(int width, int height, float scale)
@@ -53,19 +62,25 @@ namespace Evolution.Map
 					var position = new Vector2(x, y);
 					if (Map.FreeTile(position) && noiseMap[x, y] >= minValue)
 					{
-						var tile = Game.Instance.PrefabsManager.GetPrefab<Tile>(id);
-						if (tile != null)
+						var resourcePrefabName = ResourceTypeGenerator.GetResourcePrefabName(id);
+						if (resourcePrefabName != null && resourcePrefabName != "")
 						{
-							//Map.ClearTile(position);
-							var tileClone = Instantiate(tile, position, Quaternion.identity);
-							tileClone.MapPosition = position;
-							tileClone.transform.SetParent(mapContainer.transform);
-							Map.SetTile(tileClone.MapPosition, tileClone);
-							if (!decoration)
-								tileClone.Occupied = true;
+							var tile = Game.Instance.PrefabsManager.GetPrefab<Tile>(resourcePrefabName);
+							if (tile != null)
+							{
+								//Map.ClearTile(position);
+								var tileClone = Instantiate(tile, position, Quaternion.identity);
+								tileClone.MapPosition = position;
+								tileClone.transform.SetParent(mapContainer.transform);
+								Map.SetTile(tileClone.MapPosition, tileClone);
+								if (!decoration)
+									tileClone.Occupied = true;
+							}
+							else
+								Debug.LogError("There is no tile with the " + id + " id.");
 						}
 						else
-							Debug.LogError("There is no tile with the " + id + " id.");
+							Debug.LogError("There is no resource with the " + id + " id.");
 					}
 				}
 			}
@@ -91,6 +106,11 @@ namespace Evolution.Map
 						Debug.LogError("There was no resource prefab for grass!");
 				}
 			}
+		}
+
+		private void GenerateWaterPonds()
+		{
+
 		}
 
 		private void Awake()
