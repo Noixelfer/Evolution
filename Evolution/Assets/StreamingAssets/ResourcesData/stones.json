@@ -1,0 +1,36 @@
+{
+	"resourcesData" : [
+		{
+			"name" : "stone_object_01",
+			"spawnChance" : 60
+		},
+		{
+			"name" : "stone_object_02",
+			"spawnChance" : 44
+		},
+		{
+			"name" : "stone_object_03",
+			"spawnChance" : 26
+		},
+		{
+			"name" : "stone_object_04",
+			"spawnChance" : 7
+		},
+		{
+			"name" : "stone_object_05",
+			"spawnChance" : 2
+		},
+		{
+			"name" : "stone_object_06",
+			"spawnChance" : 1
+		},
+		{
+			"name" : "stone_object_07",
+			"spawnChance" : 1
+		},
+		{
+			"name" : "stone_object_08",
+			"spawnChance" : 1
+		}
+	]
+}
