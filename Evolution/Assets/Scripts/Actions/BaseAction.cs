@@ -25,17 +25,20 @@ namespace Evolution.Actions
 		/// <summary>
 		/// This function is called right before Execute code
 		/// </summary>
-		public void OnStart()
+		public virtual void OnStart()
 		{
 			Status = ActionStatus.IN_PROGRESS;
 		}
 
-		public ActionStatus OnUpdate()
+		public virtual ActionStatus OnUpdate()
 		{
 			return ActionStatus.IN_PROGRESS;
 		}
 
-		public void Pause()
+		/// <summary>
+		/// Function to pause the execution of the current action
+		/// </summary>
+		public virtual void Pause()
 		{
 			Status = ActionStatus.PAUSED;
 		}

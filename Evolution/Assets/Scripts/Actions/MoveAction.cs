@@ -2,6 +2,9 @@
 {
 	public class MoveAction : BaseAction
 	{
-		public MoveAction
+		public MoveAction ()
+		{
+
+		}
 	}
 }

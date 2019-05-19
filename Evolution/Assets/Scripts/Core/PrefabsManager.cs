@@ -21,7 +21,7 @@ namespace Evolution
 			public string path;
 		}
 
-		private Dictionary<string, GameObject> prefabs = new Dictionary<string, GameObject>();
+		private Dictionary<string, Component> prefabs = new Dictionary<string, Component>();
 		private List<PathData> paths = new List<PathData>();
 
 		public PrefabsManager()
@@ -36,14 +36,14 @@ namespace Evolution
 			}
 		}
 
-		public GameObject GetPrefab(string id)
+		public T GetPrefab<T>(string id) where T : Component
 		{
 			if (prefabs.ContainsKey(id))
-				return prefabs[id];
+				return prefabs[id] as T;
 			else
 			{
-				if (paths.Any(pathData => GetPrefabForPathAndId(pathData.path, id) != null))
-					return prefabs[id];
+				if (paths.Any(pathData => GetPrefabForPathAndId<T>(pathData.path, id) != null))
+					return prefabs[id] as T;
 				else
 				{
 					Debug.LogError("There was no prefab with the id " + id + ". Maybe the path leading to that prefab is not saved in paths or there is no prefab with the given id");
@@ -52,13 +52,12 @@ namespace Evolution
 			}
 		}
 
-		private GameObject GetPrefabForPathAndId(string path, string id)
+		private T GetPrefabForPathAndId<T>(string path, string id) where T : Component
 		{
-			var prefab = Resources.Load(path + id) as GameObject;
+			var prefab = Resources.Load<T>(path + id) as T;
 			if (prefab != null)
 				prefabs.Add(id, prefab);
 			return prefab;
-
 		}
 	}
 }

@@ -1,30 +1,29 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+
 namespace Evolution.Map
 {
 	public class MapManager : MonoBehaviour
 	{
 		public Map Map;
-		public GameObject grass1;
-		public GameObject grass2;
-		public GameObject grass3;
-		public GameObject grass4;
-		public GameObject grass5;
+		private GameObject mapContainer;
+		public float treeNoiseScale = 18;
+		public float treeMinValue = 0.5f;
 
-		public float scale = 1;
-		private float xOffset = 0;
-		private float yOffset = 0;
+		public float rockNoiseScale = 5;
+		public float rockMinValue = 0.5f;
 
 		public void GenerateMap(int width, int height)
 		{
-			xOffset = Random.Range(0, 1000000);
-			yOffset = Random.Range(0, 1000000);
-			var noiseMap = GetNoiseMap(width, height);
-			GenerateTerrainFromNoise(width, height, noiseMap);
+			Map.Size = new Vector2(width, height);
+			GenerateEmptyMap();
+			GenerateResourceFromNoise(treeNoiseScale, treeMinValue, "trunk_object_08");
+			GenerateResourceFromNoise(rockNoiseScale, rockMinValue, "stone_object_09");
 		}
 
-		private float[,] GetNoiseMap(int width, int height)
+		private float[,] GetNoiseMap(int width, int height, float scale)
 		{
+			var xOffset = Random.Range(0, 1000000);
+			var yOffset = Random.Range(0, 1000000);
 			float[,] result = new float[width, height];
 			for (int x = 0; x < width; x++)
 			{
@@ -39,29 +38,63 @@ namespace Evolution.Map
 			return result;
 		}
 
-		private void GenerateTerrainFromNoise(int width, int height, float[,] noiseMap)
+		private void GenerateResourceFromNoise(float scale, float minValue, string id, bool decoration = false)
 		{
-			for (int x = 0; x < width; x++)
+			var noiseMap = GetNoiseMap((int)Map.Size.x, (int)Map.Size.y, scale);
+			for (int x = 0; x < Map.Size.x; x++)
 			{
-				for (int y = 0; y < height; y++)
+				for (int y = 0; y < Map.Size.y; y++)
 				{
-					var val = noiseMap[x, y];
-					if (val <= 0.7f)
-						Instantiate(Game.Instance.PrefabsManager.GetPrefab("grass"), new Vector3(x, y), Quaternion.identity);
-					else
-						Instantiate(Game.Instance.PrefabsManager.GetPrefab("tree"), new Vector3(x, y), Quaternion.identity);
+					var position = new Vector2(x, y);
+					if (Map.FreeTile(position) && noiseMap[x, y] >= minValue)
+					{
+						var tile = Game.Instance.PrefabsManager.GetPrefab<Tile>(id);
+						if (tile != null)
+						{
+							//Map.ClearTile(position);
+							var tileClone = Instantiate(tile, position, Quaternion.identity);
+							tileClone.MapPosition = position;
+							tileClone.transform.SetParent(mapContainer.transform);
+							Map.SetTile(tileClone.MapPosition, tileClone);
+							if (!decoration)
+								tileClone.Occupied = true;
+						}
+						else
+							Debug.LogError("There is no tile with the " + id + " id.");
+					}
 				}
 			}
 		}
 
-		private void AddResources()
+		private void GenerateEmptyMap()
 		{
-
+			Map.ClearMap();
+			for (int x = 0; x < Map.Size.x; x++)
+			{
+				for (int y = 0; y < Map.Size.y; y++)
+				{
+					var grassTile = Instantiate(Game.Instance.PrefabsManager.GetPrefab<Tile>("grass_01"), new Vector3(x, y), Quaternion.identity);
+					grassTile.MapPosition = new Vector2(x, y);
+					grassTile.Occupied = false;
+					grassTile.transform.SetParent(mapContainer.transform);
+					Map.SetTile(grassTile.MapPosition, grassTile);
+				}
+			}
 		}
 
 		private void Awake()
 		{
-			GenerateMap(200, 200);
+			mapContainer = GameObject.Find("MapContainer");
+			if (mapContainer == null)
+				mapContainer = new GameObject("MapContainer");
+			Map = new Map();
+			GenerateMap(50, 50);
+		}
+
+		private void Update()
+		{
+			if (Input.GetKeyDown(KeyCode.Space))
+				GenerateMap(50, 50);
 		}
 	}
 }
