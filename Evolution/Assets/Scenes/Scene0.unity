@@ -223,10 +223,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a75413fec3b66f844a46bc129817aa1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  treeNoiseScale: 18
-  treeMinValue: 0.5
-  rockNoiseScale: 5
-  rockMinValue: 0.5
+  waterPondsNoiseScale: 5
+  WaterPondsMinValue: 0.748
+  treesNoiseScale: 15.68
+  treesMinValue: 0.593
+  rockNoiseScale: 8.18
+  rockMinValue: 0.733
 --- !u!4 &1028604852
 Transform:
   m_ObjectHideFlags: 0
