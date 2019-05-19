@@ -29,8 +29,8 @@ namespace Evolution.Map
 			Map.Size = new Vector2(width, height);
 			GenerateEmptyMap();
 			//GenerateWaterPonds
-			//GenerateResourceFromNoise(waterPondsNoiseScale, WaterPondsMinValue, "water");
-			//GenerateResourceFromNoise(treesNoiseScale, treesMinValue, "tree_object_08");
+			GenerateResourceFromNoise(waterPondsNoiseScale, WaterPondsMinValue, "water.json");
+			GenerateResourceFromNoise(treesNoiseScale, treesMinValue, "trees.json");
 			GenerateResourceFromNoise(rockNoiseScale, rockMinValue, "stones.json");
 		}
 
@@ -106,11 +106,6 @@ namespace Evolution.Map
 						Debug.LogError("There was no resource prefab for grass!");
 				}
 			}
-		}
-
-		private void GenerateWaterPonds()
-		{
-
 		}
 
 		private void Awake()
