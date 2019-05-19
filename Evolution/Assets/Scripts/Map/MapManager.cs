@@ -5,19 +5,24 @@ namespace Evolution.Map
 	public class MapManager : MonoBehaviour
 	{
 		public Map Map;
-		private GameObject mapContainer;
 		public float treeNoiseScale = 18;
 		public float treeMinValue = 0.5f;
 
 		public float rockNoiseScale = 5;
 		public float rockMinValue = 0.5f;
 
+		private GameObject mapContainer;
+		private ResourceTypeGenerator ResourceTypeGenerator;
+
 		public void GenerateMap(int width, int height)
 		{
+			if (ResourceTypeGenerator == null)
+				ResourceTypeGenerator = new ResourceTypeGenerator();
+
 			Map.Size = new Vector2(width, height);
 			GenerateEmptyMap();
-			GenerateResourceFromNoise(treeNoiseScale, treeMinValue, "trunk_object_08");
-			GenerateResourceFromNoise(rockNoiseScale, rockMinValue, "stone_object_09");
+			//GenerateResourceFromNoise(treeNoiseScale, treeMinValue, "trunk_object_08");
+			//GenerateResourceFromNoise(rockNoiseScale, rockMinValue, "stone_object_09");
 		}
 
 		private float[,] GetNoiseMap(int width, int height, float scale)
@@ -73,11 +78,17 @@ namespace Evolution.Map
 			{
 				for (int y = 0; y < Map.Size.y; y++)
 				{
-					var grassTile = Instantiate(Game.Instance.PrefabsManager.GetPrefab<Tile>("grass_01"), new Vector3(x, y), Quaternion.identity);
-					grassTile.MapPosition = new Vector2(x, y);
-					grassTile.Occupied = false;
-					grassTile.transform.SetParent(mapContainer.transform);
-					Map.SetTile(grassTile.MapPosition, grassTile);
+					var grassPrefabName = ResourceTypeGenerator.GetResourcePrefabName("grass.json");
+					if (grassPrefabName != null && grassPrefabName != "")
+					{
+						var grassTile = Instantiate(Game.Instance.PrefabsManager.GetPrefab<Tile>(grassPrefabName), new Vector3(x, y), Quaternion.identity);
+						grassTile.MapPosition = new Vector2(x, y);
+						grassTile.Occupied = false;
+						grassTile.transform.SetParent(mapContainer.transform);
+						Map.SetTile(grassTile.MapPosition, grassTile);
+					}
+					else
+						Debug.LogError("There was no resource prefab for grass!");
 				}
 			}
 		}
