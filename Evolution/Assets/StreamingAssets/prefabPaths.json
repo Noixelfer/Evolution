@@ -19,6 +19,10 @@
 		{
 			"name" : "StonePrefabs",
 			"path" : "Prefabs/Map/Forest/Stones/"
+		},
+		{
+			"name" : "TreesPrefabs",
+			"path" : "Prefabs/Map/Forest/Trees/"
 		}
 	]
 }
