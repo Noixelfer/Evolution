@@ -11,6 +11,14 @@
 		{
 			"name" : "RoadsPrefabs",
 			"path" : "Prefabs/Map/Roads/"
+		},
+		{
+			"name" : "WaterPrefabs",
+			"path" : "Prefabs/Map/Water/"
+		},
+		{
+			"name" : "StonePrefabs",
+			"path" : "Prefabs/Map/Forest/Stones/"
 		}
 	]
 }
