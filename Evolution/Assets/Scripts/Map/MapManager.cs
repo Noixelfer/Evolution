@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Evolution.Resourcess;
+using UnityEngine;
 
 namespace Evolution.Map
 {
@@ -29,9 +30,9 @@ namespace Evolution.Map
 			Map.Size = new Vector2(width, height);
 			GenerateEmptyMap();
 			//GenerateWaterPonds
-			GenerateResourceFromNoise(waterPondsNoiseScale, WaterPondsMinValue, "water.json");
-			GenerateResourceFromNoise(treesNoiseScale, treesMinValue, "trees.json");
-			GenerateResourceFromNoise(rockNoiseScale, rockMinValue, "stones.json");
+			GenerateTileFromNoise(waterPondsNoiseScale, WaterPondsMinValue, "water.json");
+			PlaceResourceFromNoise<NaturalResource>(treesNoiseScale, treesMinValue, "trees.json");
+			PlaceResourceFromNoise<NaturalResource>(rockNoiseScale, rockMinValue, "stones.json");
 		}
 
 		private float[,] GetNoiseMap(int width, int height, float scale)
@@ -43,8 +44,8 @@ namespace Evolution.Map
 			{
 				for (int y = 0; y < height; y++)
 				{
-					float xCoord = xOffset + (float)x / width * scale;
-					float yCoord = yOffset + (float)y / height * scale;
+					float xCoord = xOffset + (float)x / 50 * scale;
+					float yCoord = yOffset + (float)y / 50 * scale;
 					var value = Mathf.PerlinNoise(xCoord, yCoord);
 					result[x, y] = value;
 				}
@@ -52,7 +53,7 @@ namespace Evolution.Map
 			return result;
 		}
 
-		private void GenerateResourceFromNoise(float scale, float minValue, string id, bool decoration = false)
+		private void GenerateTileFromNoise(float scale, float minValue, string id, bool decoration = false)
 		{
 			var noiseMap = GetNoiseMap((int)Map.Size.x, (int)Map.Size.y, scale);
 			for (int x = 0; x < Map.Size.x; x++)
@@ -78,6 +79,37 @@ namespace Evolution.Map
 							}
 							else
 								Debug.LogError("There is no tile with the " + id + " id.");
+						}
+						else
+							Debug.LogError("There is no resource with the " + id + " id.");
+					}
+				}
+			}
+		}
+
+		private void PlaceResourceFromNoise<T>(float scale, float minValue, string id) where T : NaturalResource
+		{
+			var noiseMap = GetNoiseMap((int)Map.Size.x, (int)Map.Size.y, scale);
+			for (int x = 0; x < Map.Size.x; x++)
+			{
+				for (int y = 0; y < Map.Size.y; y++)
+				{
+					var position = new Vector2(x, y);
+					if (Map.FreeTile(position) && noiseMap[x, y] >= minValue)
+					{
+						var resourcePrefabName = ResourceTypeGenerator.GetResourcePrefabName(id);
+						if (resourcePrefabName != null && resourcePrefabName != "")
+						{
+							var resource = Game.Instance.PrefabsManager.GetPrefab<T>(resourcePrefabName);
+							if (resource != null)
+							{
+								//Map.ClearTile(position);
+								var resourceClone = Instantiate(resource, position, Quaternion.identity);
+								resourceClone.transform.SetParent(mapContainer.transform);
+								Map.GetTileValue(new Vector2(x, y)).Occupied = true;
+							}
+							else
+								Debug.LogError("There is no Natural Resource with the " + id + " id.");
 						}
 						else
 							Debug.LogError("There is no resource with the " + id + " id.");
@@ -114,13 +146,13 @@ namespace Evolution.Map
 			if (mapContainer == null)
 				mapContainer = new GameObject("MapContainer");
 			Map = new Map();
-			GenerateMap(50, 50);
+			GenerateMap(100, 100);
 		}
 
 		private void Update()
 		{
-			if (Input.GetKeyDown(KeyCode.Space))
-				GenerateMap(50, 50);
+			//if (Input.GetKeyDown(KeyCode.Space))
+			//	GenerateMap(50, 50);
 		}
 	}
 }

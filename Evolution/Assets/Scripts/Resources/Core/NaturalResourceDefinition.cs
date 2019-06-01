@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Evolution.Resourcess
 {
-	public abstract class BaseNaturalResource
+	public abstract class NaturalResourceDefinition : BaseDefinition
 	{
 		public List<CollectableResource> BaseResources;
 		public int Quantity;
@@ -13,7 +13,7 @@ namespace Evolution.Resourcess
 	[System.Serializable]
 	public class CollectableResource
 	{
-		public BaseResource BaseResource;
+		public ResourceDefinition ResourceDefinition;
 		public float Amount;
 		public float DropChance;
 	}

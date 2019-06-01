@@ -3,9 +3,8 @@
 namespace Evolution.Resourcess
 {
 	[System.Serializable]
-	public abstract class BaseResource
+	public abstract class ResourceDefinition : BaseDefinition
 	{
-		public string Name;
 		public List<string> Attributes;
 	}
 }
