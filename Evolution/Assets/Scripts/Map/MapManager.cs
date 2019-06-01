@@ -6,6 +6,8 @@ namespace Evolution.Map
 	public class MapManager : MonoBehaviour
 	{
 		public Map Map;
+		public MapGraph MapGraph;
+
 		//Water Ponds
 		public float waterPondsNoiseScale = 5;
 		[Range(0, 1)]
@@ -33,6 +35,9 @@ namespace Evolution.Map
 			GenerateTileFromNoise(waterPondsNoiseScale, WaterPondsMinValue, "water.json");
 			PlaceResourceFromNoise<NaturalResource>(treesNoiseScale, treesMinValue, "trees.json");
 			PlaceResourceFromNoise<NaturalResource>(rockNoiseScale, rockMinValue, "stones.json");
+
+			//Create the MapGraph for our current Map
+			MapGraph = new MapGraph(Map);
 		}
 
 		private float[,] GetNoiseMap(int width, int height, float scale)

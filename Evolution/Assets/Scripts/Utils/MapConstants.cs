@@ -1,4 +1,8 @@
-﻿namespace Evolution.Utils
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+namespace Evolution.Utils
 {
 	public static class MapConstants
 	{
@@ -15,5 +19,6 @@
 		public static readonly string GRASS_10 = "grass_10";
 		public static readonly string GRASS_11 = "grass_11";
 		#endregion
-	}
+		public static IList<(int, int)> neighboursOffset = new ReadOnlyCollection<(int, int)>(new List<(int, int)>{ (-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1) });
+}
 }
