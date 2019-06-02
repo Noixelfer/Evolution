@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3674723897261138697}
-  - component: {fileID: 1960492417024219757}
+  - component: {fileID: 6552691049872328679}
   m_Layer: 0
   m_Name: apple_tree
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1960492417024219757
+--- !u!114 &6552691049872328679
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,10 +42,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3674723897261138699}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48d739b6cbc21444098ec400d756c658, type: 3}
+  m_Script: {fileID: 11500000, guid: 07ef502055809d94fb8600286aaaf246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: apple_tree
+  Id: apple.tree
 --- !u!1001 &3674723897166315598
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -34,6 +34,7 @@ namespace Evolution.Actions
 					}
 					if (resultStatus == ActionStatus.FAILED)
 					{
+						action.SetStatus(ActionStatus.FAILED);
 						Unregister(action);
 					}
 				}
