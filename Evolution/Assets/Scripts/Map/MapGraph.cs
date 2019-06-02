@@ -6,7 +6,7 @@ namespace Evolution.Map
 {
 	public class MapGraph
 	{
-		private Dictionary<(int, int), Node> Nodes;
+		private Dictionary<(int, int), Node> Nodes = new Dictionary<(int, int), Node>();
 
 		public void AddNode(int x, int y)
 		{

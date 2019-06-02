@@ -19,8 +19,9 @@ namespace Evolution.Actions
 		ActionStatus Status { get; }
 		void Execute(params object[] parameters);
 		void OnStart();
-		ActionStatus OnUpdate();
+		ActionStatus OnUpdate(float time);
 		void OnEnd();
 		void Pause();
+		float Score();
 	}
 }

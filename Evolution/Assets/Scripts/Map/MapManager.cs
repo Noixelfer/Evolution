@@ -145,7 +145,7 @@ namespace Evolution.Map
 			}
 		}
 
-		private void Awake()
+		private void Start()
 		{
 			mapContainer = GameObject.Find("MapContainer");
 			if (mapContainer == null)

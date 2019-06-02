@@ -30,7 +30,7 @@ namespace Evolution.Actions
 			Status = ActionStatus.IN_PROGRESS;
 		}
 
-		public virtual ActionStatus OnUpdate()
+		public virtual ActionStatus OnUpdate(float time)
 		{
 			return ActionStatus.IN_PROGRESS;
 		}
@@ -42,5 +42,7 @@ namespace Evolution.Actions
 		{
 			Status = ActionStatus.PAUSED;
 		}
+
+		public abstract float Score();
 	}
 }

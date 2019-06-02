@@ -6,7 +6,7 @@ namespace Evolution.Actions
 {
 	public class ActionsManager : MonoBehaviour
 	{
-		private HashSet<IAction> actions;
+		private HashSet<IAction> actions = new HashSet<IAction>();
 
 		public void Register(IAction action)
 		{
@@ -25,7 +25,7 @@ namespace Evolution.Actions
 			{
 				if (action.Status == ActionStatus.IN_PROGRESS)
 				{
-					var resultStatus = action.OnUpdate();
+					var resultStatus = action.OnUpdate(Time.deltaTime);
 					if (resultStatus == ActionStatus.SUCCESSFULLY_EXECUTED)
 					{
 						action.OnEnd();
