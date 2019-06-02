@@ -31,12 +31,14 @@ namespace Evolution
 		public MapManager MapManager;
 		public PrefabsManager PrefabsManager;
 		public ActionsManager ActionsManager;
+		public InteractablesManager InteractablesManager;
 
 		private void Awake()
 		{
 			PrefabsManager = new PrefabsManager();
 			MapManager = Utility.AddComponentIfNotExisting<MapManager>(gameObject);
 			ActionsManager = Utility.AddComponentIfNotExisting<ActionsManager>(gameObject);
+			InteractablesManager = Utility.AddComponentIfNotExisting<InteractablesManager>(gameObject);
 		}
 
 		public void RunCoroutine(IEnumerator enumerator)

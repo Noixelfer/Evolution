@@ -6,6 +6,7 @@ namespace Evolution.Character
 {
 	public interface IAgent
 	{
+		IBrain Brain { get; }
 		string Name { get; set; }
 		int Age { get; set; }
 		List<IAction> KnownActions { get; set; }

@@ -7,6 +7,7 @@ namespace Evolution.Actions
 	/// </summary>
 	public abstract class BaseAction : IAction
 	{
+		public abstract string ID { get; }
 
 		public List<string> Categories { get; set; }
 
@@ -41,6 +42,11 @@ namespace Evolution.Actions
 		public virtual void Pause()
 		{
 			Status = ActionStatus.PAUSED;
+		}
+
+		public void SetStatus(ActionStatus status)
+		{
+			Status = status;
 		}
 	}
 }

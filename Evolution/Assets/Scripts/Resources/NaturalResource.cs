@@ -1,26 +1,22 @@
-﻿using Evolution.Craftable;
+﻿using Evolution.Actions;
+using Evolution.Craftable;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Evolution.Resourcess
 {
-	public class NaturalResource : MonoBehaviour, INaturalResource, ISerializable
+	public abstract class NaturalResource : BaseInteractable, INaturalResource, ISerializable
 	{
 		public NaturalResourceDefinition NaturalResourceDefinition;
-		public string id = "";
-
-		public IResource Collect(ITool tool)
-		{
-			throw new NotImplementedException();
-		}
 
 		public void LoadFromJson()
 		{
-			if (id.Equals(""))
+			if (ID.Equals(""))
 				return;
-			NaturalResourceDefinition = Utils.Utility.LoadFromJson<NaturalResourceDefinition>(Paths.Paths.NATURAL_RESOURCES_JSON + id);
+			NaturalResourceDefinition = Utils.Utility.LoadFromJson<NaturalResourceDefinition>(Paths.Paths.NATURAL_RESOURCES_JSON + ID);
 			if (NaturalResourceDefinition == null)
-				Debug.LogError("Failed to load Natural resource with id " + id);
+				Debug.LogError("Failed to load Natural resource with id " + ID);
 		}
 	}
 }

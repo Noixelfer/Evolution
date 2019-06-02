@@ -1,4 +1,5 @@
 ﻿using Evolution.Actions;
+using Evolution.Character;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +12,6 @@ namespace Evolution
 	{
 		string ID { get; }
 		GameObject gameObject { get; }
-		List<IAction> GetPossibleActions();
+		List<IAction> GetPossibleActions(IAgent agent);
 	}
 }

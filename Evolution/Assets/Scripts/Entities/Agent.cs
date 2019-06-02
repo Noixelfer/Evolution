@@ -10,11 +10,18 @@ namespace Evolution.Character
 		public int Age { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 		public List<IAction> KnownActions { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 		public Transform Transform => transform;
+		public IBrain Brain => brain;
+		private Brain brain;
 
 		private void Start()
 		{
-			var moveTask = new MoveAction(this, transform.position + new Vector3(3, 1));
-			moveTask.Execute();
+			brain = new Brain(this);
+			//moveTask.Execute();
+		}
+
+		private void Update()
+		{
+			brain.Update(Time.deltaTime);
 		}
 	}
 }

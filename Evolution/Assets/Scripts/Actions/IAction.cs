@@ -22,5 +22,6 @@ namespace Evolution.Actions
 		ActionStatus OnUpdate(float time);
 		void OnEnd();
 		void Pause();
+		void SetStatus(ActionStatus status);
 	}
 }

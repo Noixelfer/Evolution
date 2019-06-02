@@ -9,6 +9,7 @@ namespace Evolution.Actions
 {
 	public class MoveAction : BaseAction
 	{
+		public override string ID => "action.move";
 		public enum PathStatus
 		{
 			Searching = 0,
@@ -22,10 +23,10 @@ namespace Evolution.Actions
 		private Stack<(int, int)> path = null;
 		private PathStatus pathStatus = PathStatus.Searching;
 		private BackgroundWorker pathFindWorker;
+		private float startTime = 0;
 
-		public MoveAction(Agent agent, Vector2 destination)
+		public MoveAction(IAgent agent, Vector2 destination)
 		{
-			Game.Instance.ActionsManager.Register(this);
 			this.destination = destination;
 			Agent = agent;
 			pathFindWorker = new BackgroundWorker();
@@ -41,7 +42,10 @@ namespace Evolution.Actions
 			pathFindWorker.DoWork += findPathWorker_DoWork;
 			pathFindWorker.RunWorkerCompleted += findPathWorker_RunWorkerCompleted;
 			pathFindWorker.WorkerReportsProgress = true;
-			pathFindWorker.RunWorkerAsync(argument: new int[] { posX, posY});
+			pathFindWorker.WorkerSupportsCancellation = true;
+			pathFindWorker.RunWorkerAsync(argument: new int[] { posX, posY });
+			startTime = Time.time;
+			Game.Instance.ActionsManager.Register(this);
 		}
 
 		private void findPathWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
@@ -77,7 +81,7 @@ namespace Evolution.Actions
 
 		private void findPathWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
 		{
-			if (e.Cancelled)
+			if (pathFindWorker.CancellationPending)
 			{
 				Debug.LogError("Path finding worker was canceled!!!");
 				pathStatus = PathStatus.Failed;
@@ -101,18 +105,18 @@ namespace Evolution.Actions
 				}
 			}
 		}
-		//IEnumerator FindPath(int posX, int posY)
-		//{
-		//	path = AStarSearch(Game.Instance.MapManager.MapGraph, new Vector2(posX, posY), destination);
-		//	if (path != null)
-		//		pathStatus = PathStatus.Found;
-		//	else
-		//		pathStatus = PathStatus.Failed;
-		//	yield return null;
-		//}
 
 		public override ActionStatus OnUpdate(float time)
 		{
+			//We wasted too much time on searching for a path...move on
+			if (pathStatus == PathStatus.Searching && Time.time - startTime > 0.6f)
+			{
+				Debug.LogError("Too much time to find a path!!!");
+				pathFindWorker.CancelAsync();
+				//Status = ActionStatus.FAILED;
+				return ActionStatus.FAILED;
+			}
+
 			if (pathStatus == PathStatus.Failed)
 				return ActionStatus.FAILED;
 			if (pathStatus == PathStatus.Found)
@@ -123,7 +127,7 @@ namespace Evolution.Actions
 				var targetPos = path.Peek();
 				if (Agent.Transform.position != new Vector3(targetPos.Item1, targetPos.Item2))
 				{
-					Agent.Transform.position = Vector3.MoveTowards(Agent.Transform.position, new Vector3(targetPos.Item1, targetPos.Item2), 1f * time);
+					Agent.Transform.position = Vector3.MoveTowards(Agent.Transform.position, new Vector3(targetPos.Item1, targetPos.Item2), 100f * time);
 				}
 				else
 					path.Pop();
@@ -149,9 +153,12 @@ namespace Evolution.Actions
 			var currentNode = new AStarNode(null, startNode.xPosition, startNode.yPosition, 0, GetDistance(startNode.xPosition, startNode.yPosition, endNode.xPosition, endNode.yPosition));
 			nodes.Add(currentNode);
 
-
 			while (nodes.Count > 0)
 			{
+				if (pathFindWorker.CancellationPending)
+				{
+					return null;
+				}
 				var minDistance = nodes.Min(n => n.TotalDistance);
 				var bestNode = nodes.First(n => n.TotalDistance == minDistance);
 
