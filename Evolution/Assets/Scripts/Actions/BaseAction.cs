@@ -42,7 +42,5 @@ namespace Evolution.Actions
 		{
 			Status = ActionStatus.PAUSED;
 		}
-
-		public abstract float Score();
 	}
 }

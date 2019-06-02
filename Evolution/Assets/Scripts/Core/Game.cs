@@ -1,4 +1,7 @@
-﻿using Evolution.Map;
+﻿using Evolution.Actions;
+using Evolution.Map;
+using Evolution.Utils;
+using System.Collections;
 using UnityEngine;
 
 //Singleton
@@ -14,8 +17,12 @@ namespace Evolution
 			{
 				if (gameInstance == null)
 				{
-					var container = new GameObject("Game");
-					gameInstance = container.AddComponent<Game>();
+					gameInstance = FindObjectOfType<Game>();
+					if (gameInstance == null)
+					{
+						var container = new GameObject("Game");
+						gameInstance = container.AddComponent<Game>();
+					}
 				}
 				return gameInstance;
 			}
@@ -23,10 +30,18 @@ namespace Evolution
 
 		public MapManager MapManager;
 		public PrefabsManager PrefabsManager;
+		public ActionsManager ActionsManager;
+
 		private void Awake()
 		{
-			//MapManager = gameObject.AddComponent<MapManager>();
 			PrefabsManager = new PrefabsManager();
+			MapManager = Utility.AddComponentIfNotExisting<MapManager>(gameObject);
+			ActionsManager = Utility.AddComponentIfNotExisting<ActionsManager>(gameObject);
+		}
+
+		public void RunCoroutine(IEnumerator enumerator)
+		{
+			StartCoroutine(enumerator);
 		}
 	}
 }

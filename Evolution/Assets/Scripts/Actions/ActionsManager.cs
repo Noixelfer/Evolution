@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Evolution.Actions
@@ -21,7 +22,7 @@ namespace Evolution.Actions
 
 		private void Update()
 		{
-			foreach (var action in actions)
+			foreach (var action in actions.ToList())
 			{
 				if (action.Status == ActionStatus.IN_PROGRESS)
 				{

@@ -1,6 +1,7 @@
 ﻿using Evolution.Character;
 using Evolution.Map;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
 
@@ -20,12 +21,14 @@ namespace Evolution.Actions
 		private Vector2 destination;
 		private Stack<(int, int)> path = null;
 		private PathStatus pathStatus = PathStatus.Searching;
+		private BackgroundWorker pathFindWorker;
 
 		public MoveAction(Agent agent, Vector2 destination)
 		{
 			Game.Instance.ActionsManager.Register(this);
 			this.destination = destination;
 			Agent = agent;
+			pathFindWorker = new BackgroundWorker();
 		}
 
 		public override void OnStart()
@@ -34,12 +37,79 @@ namespace Evolution.Actions
 			int posX = (int)Agent.Transform.position.x;
 			int posY = (int)Agent.Transform.position.y;
 
-			path = AStarSearch(Game.Instance.MapManager.MapGraph, new Vector2(posX, posY), destination);
-			if (path != null)
-				pathStatus = PathStatus.Found;
-			else
-				pathStatus = PathStatus.Failed;
+			//Init background worker
+			pathFindWorker.DoWork += findPathWorker_DoWork;
+			pathFindWorker.RunWorkerCompleted += findPathWorker_RunWorkerCompleted;
+			pathFindWorker.WorkerReportsProgress = true;
+			pathFindWorker.RunWorkerAsync(argument: new int[] { posX, posY});
 		}
+
+		private void findPathWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+		{
+			int[] positions = new int[2];
+			bool badArguments = false;
+			if (e.Argument == null)
+			{
+				badArguments = true;
+			}
+			else
+			{
+				positions = (int[])e.Argument;
+				if (positions == null || positions.Length != 2)
+				{
+					badArguments = true;
+				}
+			}
+			if (badArguments)
+			{
+				pathStatus = PathStatus.Failed;
+				e.Cancel = true;
+				pathFindWorker.ReportProgress(100);
+				return;
+			}
+
+			int posX = positions[0];
+			int posY = positions[1];
+
+			path = AStarSearch(Game.Instance.MapManager.MapGraph, new Vector2(posX, posY), destination);
+			pathFindWorker.ReportProgress(100);
+		}
+
+		private void findPathWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+		{
+			if (e.Cancelled)
+			{
+				Debug.LogError("Path finding worker was canceled!!!");
+				pathStatus = PathStatus.Failed;
+			}
+			else if (e.Error != null)
+			{
+				Debug.LogError("There was an error in finding path background work!!!   " + e.Error);
+				pathStatus = PathStatus.Failed;
+			}
+			else
+			{
+				if (path != null)
+				{
+					Debug.Log("Path successfully found");
+					pathStatus = PathStatus.Found;
+				}
+				else
+				{
+					pathStatus = PathStatus.Failed;
+					Debug.Log("There was no path between the given points!");
+				}
+			}
+		}
+		//IEnumerator FindPath(int posX, int posY)
+		//{
+		//	path = AStarSearch(Game.Instance.MapManager.MapGraph, new Vector2(posX, posY), destination);
+		//	if (path != null)
+		//		pathStatus = PathStatus.Found;
+		//	else
+		//		pathStatus = PathStatus.Failed;
+		//	yield return null;
+		//}
 
 		public override ActionStatus OnUpdate(float time)
 		{

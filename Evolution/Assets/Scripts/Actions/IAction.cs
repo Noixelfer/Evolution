@@ -22,6 +22,5 @@ namespace Evolution.Actions
 		ActionStatus OnUpdate(float time);
 		void OnEnd();
 		void Pause();
-		float Score();
 	}
 }
