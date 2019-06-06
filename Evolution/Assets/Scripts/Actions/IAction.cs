@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 namespace Evolution.Actions
 {
@@ -17,7 +15,7 @@ namespace Evolution.Actions
 	{
 		List<string> Categories { get; set; }
 		ActionStatus Status { get; }
-		void Execute(params object[] parameters);
+		void Initialize(params object[] parameters);
 		void OnStart();
 		ActionStatus OnUpdate(float time);
 		void OnEnd();

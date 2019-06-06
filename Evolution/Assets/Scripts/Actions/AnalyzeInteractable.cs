@@ -18,7 +18,6 @@ namespace Evolution.Actions
 		public override void OnStart()
 		{
 			base.OnStart();
-			Game.Instance.ActionsManager.Register(this);
 		}
 
 		public override ActionStatus OnUpdate(float time)

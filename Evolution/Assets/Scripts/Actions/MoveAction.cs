@@ -45,7 +45,6 @@ namespace Evolution.Actions
 			pathFindWorker.WorkerSupportsCancellation = true;
 			pathFindWorker.RunWorkerAsync(argument: new int[] { posX, posY });
 			startTime = Time.time;
-			Game.Instance.ActionsManager.Register(this);
 		}
 
 		private void findPathWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
@@ -95,13 +94,12 @@ namespace Evolution.Actions
 			{
 				if (path != null)
 				{
-					Debug.Log("Path successfully found");
 					pathStatus = PathStatus.Found;
 				}
 				else
 				{
 					pathStatus = PathStatus.Failed;
-					Debug.Log("There was no path between the given points!");
+					Debug.LogError("There was no path between the given points!");
 				}
 			}
 		}
@@ -164,7 +162,6 @@ namespace Evolution.Actions
 
 				if (bestNode.DistanceToFinish == 0)
 				{
-					Debug.Log("Path completed");
 					var cNode = bestNode;
 					while (cNode.FromNode != null)
 					{

@@ -20,8 +20,7 @@ namespace Evolution.Actions
 		public override void OnStart()
 		{
 			base.OnStart();
-			Debug.Log(description);
-			Game.Instance.ActionsManager.Register(this);
+			//Debug.Log(description);
 		}
 
 		//TODO : make actual collect logic
