@@ -13,9 +13,10 @@ namespace Evolution.Actions
 
 		public ActionStatus Status { get; private set; }
 
-		public virtual void Execute(params object[] parameters)
+		public virtual void Initialize(params object[] parameters)
 		{
 			OnStart();
+			Game.Instance.ActionsManager.Register(this);
 		}
 
 		public virtual void OnEnd()

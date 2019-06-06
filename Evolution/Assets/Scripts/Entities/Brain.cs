@@ -39,7 +39,7 @@ namespace Evolution.Character
 				if (actionsToExecute.Count > 0)
 				{
 					currentAction = actionsToExecute.Pop();
-					currentAction.Execute();
+					currentAction.Initialize();
 				}
 				else
 					PickAction();
