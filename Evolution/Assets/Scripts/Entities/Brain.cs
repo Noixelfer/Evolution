@@ -72,6 +72,7 @@ namespace Evolution.Character
 					var analyzeAction = new AnalyzeInteractable(agent, interactable);
 					possbileActions.Add(new ActionScore(analyzeAction, interactable));
 				}
+
 			}
 
 			//TODO : Score the actions

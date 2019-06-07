@@ -226,6 +226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MapManager: {fileID: 0}
   ActionsManager: {fileID: 0}
+  InteractablesManager: {fileID: 0}
 --- !u!4 &1360929528
 Transform:
   m_ObjectHideFlags: 0

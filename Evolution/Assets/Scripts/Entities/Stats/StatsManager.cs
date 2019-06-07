@@ -14,7 +14,7 @@
 			Hunger = new HungerStat(owner, 200);
 			Stamina = new StaminaStat(owner, 140);
 			Energy = new EnergyStat(owner, 300);
-			Age = new AgeStat(owner, 4000000);
+			Age = new AgeStat(owner, 100000000);
 		}
 
 		public void Update(float deltaTime)

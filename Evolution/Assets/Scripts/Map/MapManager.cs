@@ -1,4 +1,5 @@
-﻿using Evolution.Resourcess;
+﻿using Evolution.Character;
+using Evolution.Resourcess;
 using UnityEngine;
 
 namespace Evolution.Map
@@ -36,6 +37,8 @@ namespace Evolution.Map
 			PlaceResourceFromNoise<NaturalResource>(treesNoiseScale, treesMinValue, "trees.json");
 			PlaceResourceFromNoise<NaturalResource>(rockNoiseScale, rockMinValue, "stones.json");
 
+			//Place Agents
+			GenerateAgents(25);
 			//Create the MapGraph for our current Map
 			MapGraph = new MapGraph(Map);
 		}
@@ -142,6 +145,28 @@ namespace Evolution.Map
 					else
 						Debug.LogError("There was no resource prefab for grass!");
 				}
+			}
+		}
+
+		private void GenerateAgents(int numberOfAgents)
+		{
+			//get empty tile
+			bool foundTile = false;
+			int tileX = 0;
+			int tileY = 0;
+			while (!foundTile)
+			{
+				tileX = (int)Random.Range(0, Map.Size.x);
+				tileY = (int)Random.Range(0, Map.Size.y);
+
+				if (!Map.GetTileValue(new Vector2(tileX, tileY)).Occupied)
+					foundTile = true;
+			}
+
+			for (int i = 0; i < numberOfAgents; i++)
+			{
+				var agent = Instantiate(Game.Instance.PrefabsManager.GetPrefab<Agent>("female_agent"));
+				agent.transform.position = new Vector3(tileX, tileY, 0);
 			}
 		}
 
