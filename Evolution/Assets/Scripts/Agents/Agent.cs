@@ -6,6 +6,7 @@ namespace Evolution.Character
 {
 	public class Agent : MonoBehaviour, IAgent
 	{
+		public int ID { get; set; } = -1;
 		public string Name { get; set; } = "Default";
 		public int Age { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 		public List<IAction> KnownActions { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
@@ -17,6 +18,7 @@ namespace Evolution.Character
 
 		private void Start()
 		{
+			Game.Instance.AgentsManager.Register(this);
 			brain = new Brain(this);
 			CharacterTraits = Traits.GetRandomTraits();
 			StatsManager = new StatsManager(this);
