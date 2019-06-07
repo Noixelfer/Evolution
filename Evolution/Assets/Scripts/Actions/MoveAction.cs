@@ -18,14 +18,14 @@ namespace Evolution.Actions
 		}
 
 
-		private IAgent Agent;
+		private Agent Agent;
 		private Vector2 destination;
 		private Stack<(int, int)> path = null;
 		private PathStatus pathStatus = PathStatus.Searching;
 		private BackgroundWorker pathFindWorker;
 		private float startTime = 0;
 
-		public MoveAction(IAgent agent, Vector2 destination)
+		public MoveAction(Agent agent, Vector2 destination)
 		{
 			this.destination = destination;
 			Agent = agent;

@@ -20,5 +20,5 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
 		Game.Instance.InteractablesManager.Unregister(this);
 	}
 
-	public abstract List<IAction> GetPossibleActions(IAgent agent);
+	public abstract List<IAction> GetPossibleActions(Agent agent);
 }

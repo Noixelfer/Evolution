@@ -9,7 +9,7 @@ namespace Evolution.Resourcess
 		public string Id = "";
 		public override string ID => Id;
 
-		public override List<IAction> GetPossibleActions(IAgent agent)
+		public override List<IAction> GetPossibleActions(Agent agent)
 		{
 			var harvestAction = new HarvestNaturalResource(agent, "Collectiong apples", 0.2f);
 			return new List<IAction>() { harvestAction };

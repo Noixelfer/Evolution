@@ -7,9 +7,9 @@ namespace Evolution.Actions
 	{
 		public override string ID => "action.analyzeInteractable";
 		private IInteractable interactable;
-		private IAgent agent;
+		private Agent agent;
 
-		public AnalyzeInteractable(IAgent agent, IInteractable interactable)
+		public AnalyzeInteractable(Agent agent, IInteractable interactable)
 		{
 			this.agent = agent;
 			this.interactable = interactable;

@@ -12,6 +12,6 @@ namespace Evolution
 	{
 		string ID { get; }
 		GameObject gameObject { get; }
-		List<IAction> GetPossibleActions(IAgent agent);
+		List<IAction> GetPossibleActions(Agent agent);
 	}
 }

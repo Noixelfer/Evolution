@@ -1,4 +1,5 @@
 ﻿using Evolution.Actions;
+using Evolution.Character;
 using Evolution.Map;
 using Evolution.Utils;
 using System.Collections;
@@ -31,11 +32,14 @@ namespace Evolution
 		public MapManager MapManager;
 		public PrefabsManager PrefabsManager;
 		public ActionsManager ActionsManager;
+		public AgentsManager AgentsManager;
 		public InteractablesManager InteractablesManager;
 
 		private void Awake()
 		{
 			PrefabsManager = new PrefabsManager();
+			AgentsManager = new AgentsManager();
+
 			MapManager = Utility.AddComponentIfNotExisting<MapManager>(gameObject);
 			ActionsManager = Utility.AddComponentIfNotExisting<ActionsManager>(gameObject);
 			InteractablesManager = Utility.AddComponentIfNotExisting<InteractablesManager>(gameObject);

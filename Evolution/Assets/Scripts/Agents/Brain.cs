@@ -12,18 +12,19 @@ namespace Evolution.Character
 	}
 	public class Brain : IBrain
 	{
+		public SocialInteraction CurrentSocialInteraction { get; set; } = null;
 		private List<IAction> knownActions;
 		private Stack<IAction> actionsToExecute;
 		private IAction currentAction = null;
-		private IAgent agent;
+		private Agent agent;
 		private HashSet<string> knownInteractables;
 		private MapGraph graph => Game.Instance.MapManager.MapGraph;
 
-		public Brain(IAgent agent)
+		public Brain(Agent agent)
 		{
 			knownActions = new List<IAction>();
 			actionsToExecute = new Stack<IAction>();
-			knownInteractables = new HashSet<string>();
+			knownInteractables = new HashSet<string>() { "Agent" };
 			this.agent = agent;
 		}
 
@@ -46,11 +47,31 @@ namespace Evolution.Character
 			}
 			else
 			{
-				if (currentAction.Status == ActionStatus.FAILED || currentAction.Status == ActionStatus.SUCCESSFULLY_EXECUTED)
+				if (currentAction.Status == ActionStatus.FAILED)
+				{
+					if (CurrentSocialInteraction != null)
+						CurrentSocialInteraction.Reject();
+					currentAction = null;
+					actionsToExecute.Clear();
+				}
+				else if (currentAction.Status == ActionStatus.SUCCESSFULLY_EXECUTED)
 					currentAction = null;
 			}
 		}
 
+		/// <summary>
+		/// Clear up states when the agent dies
+		/// </summary>
+		public void OnDeath()
+		{
+			currentAction.SetStatus(ActionStatus.FAILED);
+			currentAction = null;
+			if (CurrentSocialInteraction != null)
+			{
+				CurrentSocialInteraction.Reject();
+				CurrentSocialInteraction = null;
+			}
+		}
 		private void PickAction()
 		{
 			//Scan for interactables
@@ -101,6 +122,11 @@ namespace Evolution.Character
 				{
 					actionsToExecute.Push(pickedAction.Action);
 					actionsToExecute.Push(new MoveAction(agent, new Vector2(endNode.xPosition, endNode.yPosition)));
+					//If we want to interact with an agent, we have to ask for their permission first
+					if (pickedAction.Interactable is Agent)
+					{
+						actionsToExecute.Push(new AskForInteractPermission(agent, (Agent)pickedAction.Interactable));
+					}
 				}
 			}
 			else

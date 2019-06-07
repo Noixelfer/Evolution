@@ -6,11 +6,11 @@ namespace Evolution.Actions
 	public class HarvestNaturalResource : BaseAction
 	{
 		public override string ID => "";
-		private IAgent agent;
+		private Agent agent;
 		private string description = "";
 		private float harvestTime;
 
-		public HarvestNaturalResource(IAgent agent, string actionDescription, float harvestTime)
+		public HarvestNaturalResource(Agent agent, string actionDescription, float harvestTime)
 		{
 			this.agent = agent;
 			description = actionDescription;

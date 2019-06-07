@@ -5,7 +5,7 @@ namespace Evolution.Character
 	public class AgentsManager
 	{
 		private static int currentID = 0;
-		private Dictionary<int, IAgent> allAgents;
+		private Dictionary<int, Agent> allAgents = new Dictionary<int, Agent>();
 		public Game Game => Game.Instance;
 
 		public AgentsManager()
@@ -13,14 +13,14 @@ namespace Evolution.Character
 
 		}
 
-		public void Register(IAgent agent)
+		public void Register(Agent agent)
 		{
 			if (agent == null)
 				return;
-			if (agent.ID != -1 && allAgents.ContainsKey(agent.ID))
+			if (agent.AGENT_ID != -1 && allAgents.ContainsKey(agent.AGENT_ID))
 				return;
 
-			agent.ID = currentID;
+			agent.AGENT_ID = currentID;
 			allAgents.Add(currentID, agent);
 			currentID++;
 		}
