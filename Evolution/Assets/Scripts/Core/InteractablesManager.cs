@@ -28,7 +28,7 @@ namespace Evolution
 		{
 			var squaredRadius = radius * radius;
 			var result = new HashSet<IInteractable>();
-			foreach (var interactable in interactables.ToList())
+			foreach (var interactable in interactables)
 			{
 				var squaredDistance = (position - interactable.gameObject.transform.position).sqrMagnitude;
 				if (squaredDistance <= squaredRadius)
