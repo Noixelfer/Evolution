@@ -1,5 +1,4 @@
 ﻿using Evolution.Character;
-using UnityEngine;
 
 namespace Evolution.Actions
 {
@@ -9,25 +8,25 @@ namespace Evolution.Actions
 		private Agent talker;
 		private Agent receiver;
 		private bool canTalkToOther = false;
+		private DialogueAction dialogueAction;
 
 		public Talk(Agent talker, Agent receiver)
 		{
 			this.talker = talker;
 			this.receiver = receiver;
+			dialogueAction = new DialogueAction(talker, receiver);
 		}
 
 		public override void OnStart()
 		{
 			base.OnStart();
+			receiver.RequesterArrived(talker, dialogueAction);
+			dialogueAction?.Initialize();
 		}
 
 		public override ActionStatus OnUpdate(float time)
 		{
-			if (talker.Brain.CurrentSocialInteraction != null)
-			{
-				Debug.Log("We did it, booois");
-			}
-			return ActionStatus.SUCCESSFULLY_EXECUTED;
+			return dialogueAction.OnUpdate(time);
 		}
 	}
 }

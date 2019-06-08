@@ -12,7 +12,6 @@ namespace Evolution.Character
 	}
 	public class Brain : IBrain
 	{
-		public SocialInteraction CurrentSocialInteraction { get; set; } = null;
 		private List<IAction> knownActions;
 		private Stack<IAction> actionsToExecute;
 		private IAction currentAction = null;
@@ -33,6 +32,46 @@ namespace Evolution.Character
 			knownInteractables.Add(interactableID);
 		}
 
+		public void SetCurretActions(Stack<IAction> actions)
+		{
+			ClearCurrentActions();
+			actionsToExecute = actions;
+		}
+		public void ClearCurrentActions()
+		{
+			if (currentAction != null)
+			{
+				currentAction.SetStatus(ActionStatus.FAILED);
+				currentAction = null;
+				actionsToExecute.Clear();
+			}
+		}
+
+		public void StopWaiting(Agent agent)
+		{
+			if (currentAction != null && currentAction is Wait)
+			{
+				var waitAgentAction = (Wait)currentAction;
+				if (waitAgentAction.Requester != null && waitAgentAction.Requester.Equals(agent))
+					waitAgentAction.Resolve();
+			}
+		}
+
+		public void RequesterArrived(Agent requester, IAction socialAction)
+		{
+			if (currentAction != null && currentAction is Wait)
+			{
+				var waitAgentAction = (Wait)currentAction;
+				if (waitAgentAction.Requester != null && waitAgentAction.Requester.Equals(agent))
+				{
+					waitAgentAction.Resolve();
+					currentAction = socialAction;
+					return;
+				}
+			}
+			socialAction?.SetStatus(ActionStatus.FAILED);
+		}
+
 		public void Update(float time)
 		{
 			if (currentAction == null)
@@ -49,8 +88,6 @@ namespace Evolution.Character
 			{
 				if (currentAction.Status == ActionStatus.FAILED)
 				{
-					if (CurrentSocialInteraction != null)
-						CurrentSocialInteraction.Reject();
 					currentAction = null;
 					actionsToExecute.Clear();
 				}
@@ -66,34 +103,34 @@ namespace Evolution.Character
 		{
 			currentAction.SetStatus(ActionStatus.FAILED);
 			currentAction = null;
-			if (CurrentSocialInteraction != null)
-			{
-				CurrentSocialInteraction.Reject();
-				CurrentSocialInteraction = null;
-			}
 		}
 		private void PickAction()
 		{
 			//Scan for interactables
-			var interactables = Game.Instance.InteractablesManager.GetInteractablesAround(agent.Transform.position, 10f);
+			var interactables = Game.Instance.InteractablesManager.GetInteractablesAround(agent.Transform.position, 6f);
 
 			//Get the list of possible actions
 			List<ActionScore> possbileActions = new List<ActionScore>();
+			List<string> interactablesType = new List<string>();
+
 			foreach (var interactable in interactables)
 			{
-				if (knownInteractables.Contains(interactable.ID))
+				if (!interactablesType.Contains(interactable.ID))
 				{
-					//We already know this type of interactable, we have to add the possible actions for it
-					foreach (var action in interactable.GetPossibleActions(agent))
-						possbileActions.Add(new ActionScore(action, interactable));
+					interactablesType.Add(interactable.ID);
+					if (knownInteractables.Contains(interactable.ID))
+					{
+						//We already know this type of interactable, we have to add the possible actions for it
+						foreach (var action in interactable.GetPossibleActions(agent))
+							possbileActions.Add(new ActionScore(action, interactable));
+					}
+					else
+					{
+						//We don't know this type of interactable so we will add an analyze action for it
+						var analyzeAction = new AnalyzeInteractable(agent, interactable);
+						possbileActions.Add(new ActionScore(analyzeAction, interactable));
+					}
 				}
-				else
-				{
-					//We don't know this type of interactable so we will add an analyze action for it
-					var analyzeAction = new AnalyzeInteractable(agent, interactable);
-					possbileActions.Add(new ActionScore(analyzeAction, interactable));
-				}
-
 			}
 
 			//TODO : Score the actions
@@ -120,12 +157,18 @@ namespace Evolution.Character
 
 				if (endNode != null)
 				{
-					actionsToExecute.Push(pickedAction.Action);
-					actionsToExecute.Push(new MoveAction(agent, new Vector2(endNode.xPosition, endNode.yPosition)));
+					var action = pickedAction.Action;
+					var moveAction = new MoveAction(agent, new Vector2(endNode.xPosition, endNode.yPosition));
+					actionsToExecute.Push(action);
+					actionsToExecute.Push(moveAction);
+
 					//If we want to interact with an agent, we have to ask for their permission first
 					if (pickedAction.Interactable is Agent)
 					{
-						actionsToExecute.Push(new AskForInteractPermission(agent, (Agent)pickedAction.Interactable));
+						var receiverAgent = (Agent)pickedAction.Interactable;
+						var askForInteraction = new AskForInteractPermission(agent, (Agent)pickedAction.Interactable);
+						askForInteraction.OnEndAction += () => moveAction.OnFailedAction += () => receiverAgent?.StopWaiting(agent);
+						actionsToExecute.Push(askForInteraction);
 					}
 				}
 			}
@@ -133,7 +176,6 @@ namespace Evolution.Character
 			{
 				actionsToExecute.Push(pickedAction.Action);
 			}
-
 		}
 
 		private ActionScore ChooseAction(List<ActionScore> actions)
@@ -158,7 +200,7 @@ namespace Evolution.Character
 				return null;
 			}
 
-			var randomIndice = Random.Range(0, bestActions.Count - 1);
+			var randomIndice = Random.Range(0, bestActions.Count);
 			return bestActions[randomIndice];
 		}
 

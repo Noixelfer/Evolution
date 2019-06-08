@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Evolution.Actions;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Evolution.Character
@@ -7,10 +8,12 @@ namespace Evolution.Character
 	{
 		private Agent owner;
 		private Dictionary<Agent, float> friendshipLevels = new Dictionary<Agent, float>();
+		private Brain brain;
 
-		public RelationController(Agent owner)
+		public RelationController(Agent owner, Brain brain)
 		{
 			this.owner = owner;
+			this.brain = brain;
 		}
 
 		public void ChangeFriendshipLevel(Agent other, float value)
@@ -39,6 +42,10 @@ namespace Evolution.Character
 			if (response.Equals(true))
 			{
 				//If we accepted the interact request, we need to drop our current actions and add a Wait action
+				var waitAgentAction = new Wait(other, 15f);
+				var actionsToExecute = new Stack<IAction>();
+				actionsToExecute.Push(waitAgentAction);
+				brain.SetCurretActions(actionsToExecute);
 			}
 
 			return response;

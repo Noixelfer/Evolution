@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Evolution.Character;
+using UnityEngine;
 
 namespace Evolution.Actions
 {
@@ -11,9 +12,16 @@ namespace Evolution.Actions
 		public override string ID => "Wait";
 		private float waitTime;
 		private bool resolved = false;
+		public Agent Requester { get; private set; }
 
 		public Wait(float waitTime = -1)
 		{
+			this.waitTime = waitTime;
+		}
+
+		public Wait(Agent requester, float waitTime = -1)
+		{
+			Requester = requester;
 			this.waitTime = waitTime;
 		}
 

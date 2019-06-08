@@ -5,13 +5,11 @@ namespace Evolution.Character
 	public class AgeStat : BaseStat<float>
 	{
 		public override string Name => "Age";
-		private float realTimeMultiplier;
 		private float currentAgeInSeconds = 0;
 		private Age Age;
 
-		public AgeStat(Agent owner, float realTimeMultiplier) : base(owner)
+		public AgeStat(Agent owner) : base(owner)
 		{
-			this.realTimeMultiplier = realTimeMultiplier;
 			Age = new Age();
 		}
 
@@ -29,8 +27,8 @@ namespace Evolution.Character
 
 		public override void UpdateStat(float deltaTime)
 		{
-			currentAgeInSeconds += deltaTime * realTimeMultiplier;
-			Age.GetOlder(deltaTime * realTimeMultiplier);
+			currentAgeInSeconds += deltaTime;
+			Age.GetOlder(deltaTime);
 			if (DiedOfOldAge(deltaTime))
 				Owner.Die("died of old age!");
 		}
@@ -54,9 +52,6 @@ namespace Evolution.Character
 
 	public class Age
 	{
-		private readonly ulong SECONDS_IN_A_YEAR = 31556926;
-		private readonly ulong SECONDS_IN_A_MONTH = 2629744;
-		private readonly ulong SECONDS_IN_A_DAY = 86400;
 		private ulong secondsAlive;
 
 		public Age(ulong secondsAlive = 0)
@@ -73,9 +68,9 @@ namespace Evolution.Character
 
 		private void UpdateAge(ulong seconds)
 		{
-			Years = seconds / SECONDS_IN_A_YEAR;
-			Months = (seconds - Years * SECONDS_IN_A_YEAR) / SECONDS_IN_A_MONTH;
-			Days = (seconds - Years * SECONDS_IN_A_YEAR - Months * SECONDS_IN_A_MONTH) / SECONDS_IN_A_DAY;
+			Years = seconds / (ulong)Constants.SECONDS_IN_A_YEAR;
+			Months = (seconds - Years * (ulong)Constants.SECONDS_IN_A_YEAR) / (ulong)Constants.SECONDS_IN_A_MONTH;
+			Days = (seconds - Years * (ulong)Constants.SECONDS_IN_A_YEAR - Months * (ulong)Constants.SECONDS_IN_A_MONTH) / (ulong)Constants.SECONDS_IN_A_DAY;
 		}
 
 		public ulong Years = 0;

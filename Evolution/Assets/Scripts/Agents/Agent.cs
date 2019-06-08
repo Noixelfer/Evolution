@@ -1,10 +1,11 @@
 ﻿using Evolution.Actions;
+using Evolution.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Evolution.Character
 {
-	public class Agent : BaseInteractable
+	public class Agent : BaseInteractable, ISocialInteraction
 	{
 		public int AGENT_ID = -1;
 		public override string ID => "Agent";
@@ -27,14 +28,14 @@ namespace Evolution.Character
 			brain = new Brain(this);
 			CharacterTraits = Traits.GetRandomTraits();
 			StatsManager = new StatsManager(this);
-			RelationController = new RelationController(this);
+			RelationController = new RelationController(this, brain);
 			//moveTask.Execute();
 		}
 
 		private void Update()
 		{
-			brain.Update(Time.deltaTime);
-			StatsManager.Update(Time.deltaTime);
+			brain.Update(Time.deltaTime * Constants.REAL_TIME_MULTIPLIER);
+			StatsManager.Update(Time.deltaTime * Constants.REAL_TIME_MULTIPLIER);
 		}
 
 		public void Die(string causeOfDeath)
@@ -49,6 +50,16 @@ namespace Evolution.Character
 			var possibleActions = new List<IAction>();
 			possibleActions.Add(new Talk(agent, this));
 			return possibleActions;
+		}
+
+		public void StopWaiting(Agent agent)
+		{
+			brain.StopWaiting(agent);
+		}
+
+		public void RequesterArrived(Agent requester, IAction socialAction)
+		{
+			brain.RequesterArrived(requester, socialAction);
 		}
 	}
 }

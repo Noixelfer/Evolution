@@ -12,7 +12,7 @@ namespace Evolution.Actions
 		public Action<float> OnUpdateAction { get; set; }
 		public Action OnEndAction { get; set; }
 		public Action OnPauseAction { get; set; }
-		public Action OnFailedAction { get; set; }
+		public Action OnFailedAction { get; set; } 
 
 		public abstract string ID { get; }
 

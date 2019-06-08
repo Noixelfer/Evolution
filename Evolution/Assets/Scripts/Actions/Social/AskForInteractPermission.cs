@@ -21,13 +21,12 @@ namespace Evolution.Actions
 			canInterract = receiver.RelationController.RespondToSocialRequest(requester);
 			if (canInterract)
 			{
-				Debug.Log("talk permission was accpted");
-				requester.Brain.CurrentSocialInteraction = new SocialInteraction(requester, receiver);
+				Debug.Log("Interact permission was accpted");
 				return ActionStatus.SUCCESSFULLY_EXECUTED;
 			}
 			else
 			{
-				Debug.Log("talk permission was denied");
+				Debug.Log("Interact permission was denied");
 				return ActionStatus.FAILED;
 			}
 		}

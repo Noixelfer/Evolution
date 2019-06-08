@@ -11,7 +11,7 @@ namespace Evolution.Resourcess
 
 		public override List<IAction> GetPossibleActions(Agent agent)
 		{
-			var harvestAction = new HarvestNaturalResource(agent, "Collectiong apples", 0.2f);
+			var harvestAction = new HarvestNaturalResource(agent, "Collectiong apples", Constants.COLLECT_APPLE_TIME);
 			return new List<IAction>() { harvestAction };
 		}
 	}

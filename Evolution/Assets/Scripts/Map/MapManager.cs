@@ -38,7 +38,7 @@ namespace Evolution.Map
 			PlaceResourceFromNoise<NaturalResource>(rockNoiseScale, rockMinValue, "stones.json");
 
 			//Place Agents
-			GenerateAgents(25);
+			GenerateAgents(20);
 			//Create the MapGraph for our current Map
 			MapGraph = new MapGraph(Map);
 		}

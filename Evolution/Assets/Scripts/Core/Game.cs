@@ -3,6 +3,7 @@ using Evolution.Character;
 using Evolution.Map;
 using Evolution.Utils;
 using System.Collections;
+using System.Threading;
 using UnityEngine;
 
 //Singleton
@@ -43,6 +44,7 @@ namespace Evolution
 			MapManager = Utility.AddComponentIfNotExisting<MapManager>(gameObject);
 			ActionsManager = Utility.AddComponentIfNotExisting<ActionsManager>(gameObject);
 			InteractablesManager = Utility.AddComponentIfNotExisting<InteractablesManager>(gameObject);
+			ThreadPool.SetMaxThreads(20, 20);
 		}
 
 		public void RunCoroutine(IEnumerator enumerator)

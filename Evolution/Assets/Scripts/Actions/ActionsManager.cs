@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Evolution.Utils;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Evolution.Actions
@@ -25,7 +26,7 @@ namespace Evolution.Actions
 			{
 				if (action.Status == ActionStatus.IN_PROGRESS)
 				{
-					var resultStatus = action.OnUpdate(Time.deltaTime);
+					var resultStatus = action.OnUpdate(Time.deltaTime * Constants.REAL_TIME_MULTIPLIER);
 					if (resultStatus == ActionStatus.SUCCESSFULLY_EXECUTED)
 					{
 						action.OnEnd();
