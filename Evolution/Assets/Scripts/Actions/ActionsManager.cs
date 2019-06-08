@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -34,6 +33,7 @@ namespace Evolution.Actions
 					}
 					if (resultStatus == ActionStatus.FAILED)
 					{
+						action.OnFailedAction?.Invoke();
 						action.SetStatus(ActionStatus.FAILED);
 						Unregister(action);
 					}

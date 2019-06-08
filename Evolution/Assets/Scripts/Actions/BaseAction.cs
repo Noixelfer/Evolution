@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Evolution.Actions
 {
@@ -7,6 +8,12 @@ namespace Evolution.Actions
 	/// </summary>
 	public abstract class BaseAction : IAction
 	{
+		public Action OnStartAction { get; set; }
+		public Action<float> OnUpdateAction { get; set; }
+		public Action OnEndAction { get; set; }
+		public Action OnPauseAction { get; set; }
+		public Action OnFailedAction { get; set; }
+
 		public abstract string ID { get; }
 
 		public List<string> Categories { get; set; }
@@ -22,6 +29,7 @@ namespace Evolution.Actions
 		public virtual void OnEnd()
 		{
 			Status = ActionStatus.SUCCESSFULLY_EXECUTED;
+			OnEndAction?.Invoke();
 		}
 
 		/// <summary>
@@ -30,10 +38,12 @@ namespace Evolution.Actions
 		public virtual void OnStart()
 		{
 			Status = ActionStatus.IN_PROGRESS;
+			OnStartAction?.Invoke();
 		}
 
 		public virtual ActionStatus OnUpdate(float time)
 		{
+			OnUpdateAction?.Invoke(time);
 			return ActionStatus.IN_PROGRESS;
 		}
 
@@ -42,6 +52,7 @@ namespace Evolution.Actions
 		/// </summary>
 		public virtual void Pause()
 		{
+			OnPauseAction?.Invoke();
 			Status = ActionStatus.PAUSED;
 		}
 

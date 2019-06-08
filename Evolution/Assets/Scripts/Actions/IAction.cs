@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Evolution.Actions
 {
@@ -13,6 +14,12 @@ namespace Evolution.Actions
 
 	public interface IAction
 	{
+		Action OnStartAction { get; set; }
+		Action<float> OnUpdateAction { get; set; }
+		Action OnEndAction { get; set; }
+		Action OnPauseAction { get; set; }
+		Action OnFailedAction { get; set; }
+
 		List<string> Categories { get; set; }
 		ActionStatus Status { get; }
 		void Initialize(params object[] parameters);
