@@ -1,8 +1,8 @@
 ﻿using Evolution.Character;
 using Evolution.Map;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 
 namespace Evolution.Actions
@@ -17,19 +17,20 @@ namespace Evolution.Actions
 			Failed = 2
 		}
 
-
+		private const float AGENT_SPEED = 4f;
 		private Agent Agent;
 		private Vector2 destination;
 		private Stack<(int, int)> path = null;
 		private PathStatus pathStatus = PathStatus.Searching;
-		private BackgroundWorker pathFindWorker;
 		private float startTime = 0;
+		private Vector3 invalidVector = new Vector3(-999, -999, -999);
+		private Vector3 targetPos;
+		private bool searchCanceled = false;
 
 		public MoveAction(Agent agent, Vector2 destination)
 		{
 			this.destination = destination;
 			Agent = agent;
-			pathFindWorker = new BackgroundWorker();
 		}
 
 		public override void OnStart()
@@ -37,70 +38,23 @@ namespace Evolution.Actions
 			base.OnStart();
 			int posX = (int)Agent.Transform.position.x;
 			int posY = (int)Agent.Transform.position.y;
-
-			//Init background worker
-			pathFindWorker.DoWork += findPathWorker_DoWork;
-			pathFindWorker.RunWorkerCompleted += findPathWorker_RunWorkerCompleted;
-			pathFindWorker.WorkerReportsProgress = true;
-			pathFindWorker.WorkerSupportsCancellation = true;
-			pathFindWorker.RunWorkerAsync(argument: new int[] { posX, posY });
 			startTime = Time.time;
+			targetPos = invalidVector;
+			searchCanceled = false;
+			ThreadPool.QueueUserWorkItem((_) => SearchForPath(posX, posY));
 		}
 
-		private void findPathWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+		private void SearchForPath(int posX, int posY)
 		{
-			int[] positions = new int[2];
-			bool badArguments = false;
-			if (e.Argument == null)
-			{
-				badArguments = true;
-			}
-			else
-			{
-				positions = (int[])e.Argument;
-				if (positions == null || positions.Length != 2)
-				{
-					badArguments = true;
-				}
-			}
-			if (badArguments)
-			{
-				pathStatus = PathStatus.Failed;
-				e.Cancel = true;
-				pathFindWorker.ReportProgress(100);
-				return;
-			}
-
-			int posX = positions[0];
-			int posY = positions[1];
-
 			path = AStarSearch(Game.Instance.MapManager.MapGraph, new Vector2(posX, posY), destination);
-			pathFindWorker.ReportProgress(100);
-		}
-
-		private void findPathWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-		{
-			if (pathFindWorker.CancellationPending)
+			if (path != null)
 			{
-				Debug.LogError("Path finding worker was canceled!!!");
-				pathStatus = PathStatus.Failed;
-			}
-			else if (e.Error != null)
-			{
-				Debug.LogError("There was an error in finding path background work!!!   " + e.Error);
-				pathStatus = PathStatus.Failed;
+				pathStatus = PathStatus.Found;
 			}
 			else
 			{
-				if (path != null)
-				{
-					pathStatus = PathStatus.Found;
-				}
-				else
-				{
-					pathStatus = PathStatus.Failed;
-					Debug.LogError("There was no path between the given points!");
-				}
+				pathStatus = PathStatus.Failed;
+				Debug.LogError("There was no path between the given points!");
 			}
 		}
 
@@ -110,7 +64,7 @@ namespace Evolution.Actions
 			if (pathStatus == PathStatus.Searching && Time.time - startTime > 0.6f)
 			{
 				Debug.LogError("Too much time to find a path!!!");
-				pathFindWorker.CancelAsync();
+				searchCanceled = true;
 				//Status = ActionStatus.FAILED;
 				return ActionStatus.FAILED;
 			}
@@ -122,16 +76,33 @@ namespace Evolution.Actions
 				if (path.Count == 0)
 					return ActionStatus.SUCCESSFULLY_EXECUTED;
 
-				var targetPos = path.Peek();
-				if (Agent.Transform.position != new Vector3(targetPos.Item1, targetPos.Item2))
+				if (targetPos == invalidVector)
 				{
-					Agent.Transform.position = Vector3.MoveTowards(Agent.Transform.position, new Vector3(targetPos.Item1, targetPos.Item2), 100f * time);
+					var position = path.Peek();
+					targetPos = GetRandomTilePosition(position);
+				}
+
+				if (Agent.Transform.position != targetPos)
+				{
+					Agent.Transform.position = Vector3.MoveTowards(Agent.Transform.position, targetPos, AGENT_SPEED * time);
 				}
 				else
-					path.Pop();
+				{
+					var position = path.Pop();
+					targetPos = GetRandomTilePosition(position);
+				}
 			}
 
 			return ActionStatus.IN_PROGRESS;
+		}
+
+		private Vector3 GetRandomTilePosition((int, int) position)
+		{
+			var xOffset = 0;// Random.Range(-0.45f, 0.45f);
+			var yOffset = 0;// Random.Range(-0.45f, 0.45f);
+
+			var newPosition = new Vector3((int)position.Item1 + xOffset, (int)position.Item2 + yOffset);
+			return newPosition;
 		}
 
 		private Stack<(int, int)> AStarSearch(MapGraph graph, Vector2 startPosition, Vector2 endPosition)
@@ -153,9 +124,10 @@ namespace Evolution.Actions
 
 			while (nodes.Count > 0)
 			{
-				if (pathFindWorker.CancellationPending)
+				if (searchCanceled)
 				{
-					return null;
+					Debug.LogError("Thread successfully stopped with force");
+					break;
 				}
 				var minDistance = nodes.Min(n => n.TotalDistance);
 				var bestNode = nodes.First(n => n.TotalDistance == minDistance);
