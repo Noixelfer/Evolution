@@ -20,6 +20,7 @@ namespace Evolution.Actions
 		Action OnPauseAction { get; set; }
 		Action OnFailedAction { get; set; }
 
+		string Description { get; }
 		List<string> Categories { get; set; }
 		ActionStatus Status { get; }
 		void Initialize(params object[] parameters);

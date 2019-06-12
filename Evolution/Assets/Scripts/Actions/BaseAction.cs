@@ -14,6 +14,7 @@ namespace Evolution.Actions
 		public Action OnPauseAction { get; set; }
 		public Action OnFailedAction { get; set; }
 
+		public virtual string Description { get; protected set; } = "";
 		public abstract string ID { get; }
 
 		public List<string> Categories { get; set; }

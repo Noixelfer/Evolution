@@ -6,13 +6,12 @@ namespace Evolution.Actions
 	{
 		public override string ID => "";
 		private Agent agent;
-		private string description = "";
 		private float harvestTime;
 
 		public HarvestNaturalResource(Agent agent, string actionDescription, float harvestTime)
 		{
 			this.agent = agent;
-			description = actionDescription;
+			Description = actionDescription;
 			this.harvestTime = harvestTime;
 		}
 
