@@ -17,25 +17,25 @@ namespace Evolution.Character
 		/// <summary>
 		/// List with all available traits
 		/// </summary>
-		public static readonly HashSet<Trait> AllTraits = new HashSet<Trait>()
+		public static readonly Dictionary<string, Trait> AllTraits = new Dictionary<string, Trait>()
 		{
-			new Trait(SOCIALBLE_TRAIT, "Atisocial"),
-			new Trait(ACTIVE_TRAIT, "Slauch"),
-			new Trait(AGRESSIVE_TRAIT, "Passive"),
-			new Trait(CAREFUL_TRAIT, "Gambler"),
-			new Trait(LUST_TRAIT, "Chastity"),
-			new Trait(GREEDY_TRADE, "Generous"),
-			new Trait(FAST_LEARNER_TRAIT, "Slow Learner"),
-			new Trait(CURIOUS_TRAIT, "Incurious")
+			{SOCIALBLE_TRAIT, new Trait(SOCIALBLE_TRAIT, "Atisocial") },
+			{ACTIVE_TRAIT, new Trait(ACTIVE_TRAIT, "Slauch") },
+			{AGRESSIVE_TRAIT, new Trait(AGRESSIVE_TRAIT, "Passive")},
+			{CAREFUL_TRAIT, new Trait(CAREFUL_TRAIT, "Gambler")},
+			{LUST_TRAIT, new Trait(LUST_TRAIT, "Chastity")},
+			{GREEDY_TRADE, new Trait(GREEDY_TRADE, "Generous")},
+			{FAST_LEARNER_TRAIT, new Trait(FAST_LEARNER_TRAIT, "Slow Learner")},
+			{CURIOUS_TRAIT, new Trait(CURIOUS_TRAIT, "Incurious")}
 		};
 
-		public static HashSet<Trait> GetRandomTraits()
+		public static Dictionary<string, Trait> GetRandomTraits()
 		{
-			var traits = new HashSet<Trait>();
+			var traits = new Dictionary<string, Trait>();
 			foreach (var trait in AllTraits)
 			{
-				trait.Percentage = Random.Range(0f, 1f);
-				traits.Add(trait);
+				trait.Value.Percentage = Random.Range(0f, 1f);
+				traits.Add(trait.Key, trait.Value);
 			}
 
 			return traits;
