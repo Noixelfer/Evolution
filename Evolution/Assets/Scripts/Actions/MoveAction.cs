@@ -53,6 +53,8 @@ namespace Evolution.Actions
 			}
 			else
 			{
+				//Mark the position as invalid
+				Agent.Brain.MarkInvalidPoint((int)destination.x, (int)destination.y);
 				pathStatus = PathStatus.Failed;
 				Debug.LogError("There was no path between the given points!");
 			}

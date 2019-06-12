@@ -18,6 +18,8 @@ namespace Evolution.Character
 		private Agent agent;
 		private HashSet<string> knownInteractables;
 		private MapGraph graph => Game.Instance.MapManager.MapGraph;
+		private Dictionary<(int, int), float> invalidPoints = new Dictionary<(int, int), float>();
+		private Dictionary<(int, int), float> pendingInvalidPoints = new Dictionary<(int, int), float>();
 
 		public Brain(Agent agent)
 		{
@@ -74,12 +76,14 @@ namespace Evolution.Character
 
 		public void Update(float time)
 		{
+			UpdateInvalidPoints(time);
 			if (currentAction == null)
 			{
 				if (actionsToExecute.Count > 0)
 				{
 					currentAction = actionsToExecute.Pop();
 					currentAction.Initialize();
+					agent.UIAgentStatus?.SetStatus(currentAction.Description);
 				}
 				else
 					PickAction();
@@ -104,6 +108,35 @@ namespace Evolution.Character
 			currentAction.SetStatus(ActionStatus.FAILED);
 			currentAction = null;
 		}
+
+		/// <summary>
+		/// Marks a position as invalid. Invalid positions will not be selected in the next 5 seconds
+		/// </summary>
+		/// <param name="posX"></param>
+		/// <param name="posY"></param>
+		public void MarkInvalidPoint(int posX, int posY)
+		{
+			pendingInvalidPoints.Add((posX, posY), 5f);
+		}
+
+		private void UpdateInvalidPoints(float deltaTime)
+		{
+			var pointsToBeRemoved = new HashSet<(int, int)>();
+			foreach (var key in invalidPoints.Keys)
+			{
+				invalidPoints[key] -= deltaTime;
+				if (invalidPoints[key] <= 0)
+					pointsToBeRemoved.Add(key);
+			}
+
+			foreach (var key in pointsToBeRemoved)
+				invalidPoints.Remove(key);
+
+			foreach (var key in pendingInvalidPoints.Keys)
+				invalidPoints.Add(key, pendingInvalidPoints[key]);
+			pendingInvalidPoints.Clear();
+		}
+
 		private void PickAction()
 		{
 			//Scan for interactables
@@ -152,7 +185,7 @@ namespace Evolution.Character
 				foreach (var offset in Utils.MapConstants.neighboursOffset)
 				{
 					var node = graph.GetNode(posX + offset.Item1, posY + offset.Item2);
-					if (node != null)
+					if (node != null && !invalidPoints.ContainsKey((node.xPosition, node.yPosition)))
 					{
 						endNode = node;
 						break;
