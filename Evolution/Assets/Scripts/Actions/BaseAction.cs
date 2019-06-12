@@ -12,7 +12,7 @@ namespace Evolution.Actions
 		public Action<float> OnUpdateAction { get; set; }
 		public Action OnEndAction { get; set; }
 		public Action OnPauseAction { get; set; }
-		public Action OnFailedAction { get; set; } 
+		public Action OnFailedAction { get; set; }
 
 		public abstract string ID { get; }
 
@@ -59,6 +59,15 @@ namespace Evolution.Actions
 		public void SetStatus(ActionStatus status)
 		{
 			Status = status;
+		}
+
+		/// <summary>
+		/// Action to calculate the Score using weights for traits
+		/// </summary>
+		/// <returns></returns>
+		public virtual float GetScoreBasedOnTraits()
+		{
+			return 0;
 		}
 	}
 }

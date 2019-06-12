@@ -37,7 +37,6 @@ namespace Evolution.Character
 				trait.Value.Percentage = Random.Range(0f, 1f);
 				traits.Add(trait.Key, trait.Value);
 			}
-
 			return traits;
 		}
 	}
