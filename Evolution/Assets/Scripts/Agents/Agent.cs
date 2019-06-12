@@ -17,6 +17,7 @@ namespace Evolution.Character
 		public Dictionary<string, Trait> CharacterTraits = new Dictionary<string, Trait>();
 		public StatsManager StatsManager;
 		public RelationController RelationController;
+		public UIAgentStatus UIAgentStatus;
 
 		private Brain brain;
 
@@ -27,6 +28,7 @@ namespace Evolution.Character
 			CharacterTraits = Traits.GetRandomTraits();
 			StatsManager = new StatsManager(this);
 			RelationController = new RelationController(this, brain);
+			UIAgentStatus = GetComponentInChildren<UIAgentStatus>();
 			//moveTask.Execute();
 		}
 
