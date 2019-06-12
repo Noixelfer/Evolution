@@ -12,6 +12,7 @@ namespace Evolution.Character
 		public static readonly string LUST_TRAIT = "Lust";
 		public static readonly string GREEDY_TRADE = "Greedy";
 		public static readonly string FAST_LEARNER_TRAIT = "Fast Learner";
+		public static readonly string CURIOUS_TRAIT = "Curious";
 
 		/// <summary>
 		/// List with all available traits
@@ -24,7 +25,8 @@ namespace Evolution.Character
 			new Trait(CAREFUL_TRAIT, "Gambler"),
 			new Trait(LUST_TRAIT, "Chastity"),
 			new Trait(GREEDY_TRADE, "Generous"),
-			new Trait(FAST_LEARNER_TRAIT, "Slow Learner")
+			new Trait(FAST_LEARNER_TRAIT, "Slow Learner"),
+			new Trait(CURIOUS_TRAIT, "Incurious")
 		};
 
 		public static List<Trait> GetRandomTraits()
