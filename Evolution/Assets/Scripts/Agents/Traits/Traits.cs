@@ -17,7 +17,7 @@ namespace Evolution.Character
 		/// <summary>
 		/// List with all available traits
 		/// </summary>
-		public static readonly List<Trait> AllTraits = new List<Trait>()
+		public static readonly HashSet<Trait> AllTraits = new HashSet<Trait>()
 		{
 			new Trait(SOCIALBLE_TRAIT, "Atisocial"),
 			new Trait(ACTIVE_TRAIT, "Slauch"),
@@ -29,9 +29,9 @@ namespace Evolution.Character
 			new Trait(CURIOUS_TRAIT, "Incurious")
 		};
 
-		public static List<Trait> GetRandomTraits()
+		public static HashSet<Trait> GetRandomTraits()
 		{
-			var traits = new List<Trait>();
+			var traits = new HashSet<Trait>();
 			foreach (var trait in AllTraits)
 			{
 				trait.Percentage = Random.Range(0f, 1f);

@@ -14,7 +14,7 @@ namespace Evolution.Character
 		public IBrain Brain => brain;
 		public Inventory Inventory;
 
-		public List<Trait> CharacterTraits = new List<Trait>();
+		public HashSet<Trait> CharacterTraits = new HashSet<Trait>();
 		public StatsManager StatsManager;
 		public RelationController RelationController;
 
