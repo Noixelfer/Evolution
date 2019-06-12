@@ -134,6 +134,10 @@ namespace Evolution.Character
 			}
 
 			//TODO : Score the actions
+			foreach (var action in possbileActions)
+			{
+				action.Score = action.Action.GetScoreBasedOnTraits();
+			}
 
 			//Pick an action from best actions
 			var pickedAction = ChooseAction(possbileActions);
