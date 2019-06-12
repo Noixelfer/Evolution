@@ -28,7 +28,7 @@ namespace Evolution.Character
 			var response = false;
 			if (!friendshipLevels.ContainsKey(other))
 			{
-				//TODO : calculate the response based
+				//TODO : calculate the response based on traits
 				response = Random.Range(0f, 1f) < 0.5f;
 			}
 			else

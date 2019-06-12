@@ -1,5 +1,5 @@
 ﻿using Evolution.Actions;
-using Evolution.Utils;
+using Evolution.Items;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,11 +10,9 @@ namespace Evolution.Character
 		public int AGENT_ID = -1;
 		public override string ID => "Agent";
 		public string Name { get; set; } = "Default";
-		public int Age { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-		public List<IAction> KnownActions { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 		public Transform Transform => transform;
 		public IBrain Brain => brain;
-
+		public Inventory Inventory;
 
 		public List<Trait> CharacterTraits = new List<Trait>();
 		public StatsManager StatsManager;
