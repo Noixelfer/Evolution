@@ -30,5 +30,14 @@ namespace Evolution.Actions
 			agent.Brain.AddKnownInteractable(interactable.ID);
 			return ActionStatus.SUCCESSFULLY_EXECUTED;
 		}
+
+		public override float GetScoreBasedOnTraits()
+		{
+			var curiousTrait = agent.CharacterTraits[Traits.CURIOUS_TRAIT];
+			var carefullTrait = agent.CharacterTraits[Traits.CAREFUL_TRAIT];
+
+			//More courious and carefree you are, higher the score will be for analyze action.
+			return (curiousTrait.Percentage * 0.7f + (1 - carefullTrait.Percentage) * 0.3f) * 0.5f;
+		}
 	}
 }
