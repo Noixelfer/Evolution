@@ -1,5 +1,4 @@
 ﻿using Evolution.Character;
-using UnityEngine;
 
 namespace Evolution.Actions
 {
@@ -20,7 +19,6 @@ namespace Evolution.Actions
 		public override void OnStart()
 		{
 			base.OnStart();
-			//Debug.Log(description);
 		}
 
 		//TODO : make actual collect logic
@@ -30,6 +28,12 @@ namespace Evolution.Actions
 			if (harvestTime <= 0)
 				return ActionStatus.SUCCESSFULLY_EXECUTED;
 			return ActionStatus.IN_PROGRESS;
+		}
+
+		public override float GetScoreBasedOnTraits()
+		{
+			var activeTrait = agent.CharacterTraits[Traits.ACTIVE_TRAIT];
+			return activeTrait.Percentage * 0.5f;
 		}
 	}
 }

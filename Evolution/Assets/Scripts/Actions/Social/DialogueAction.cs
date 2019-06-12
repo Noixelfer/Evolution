@@ -18,6 +18,7 @@ namespace Evolution.Actions
 
 		public override ActionStatus OnUpdate(float time)
 		{
+			//TODO : Actual dialogue implementation
 			return ActionStatus.SUCCESSFULLY_EXECUTED;
 		}
 	}

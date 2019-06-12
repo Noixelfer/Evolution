@@ -7,7 +7,6 @@ namespace Evolution.Actions
 		public override string ID => "Talk";
 		private Agent talker;
 		private Agent receiver;
-		private bool canTalkToOther = false;
 		private DialogueAction dialogueAction;
 
 		public Talk(Agent talker, Agent receiver)
@@ -27,6 +26,12 @@ namespace Evolution.Actions
 		public override ActionStatus OnUpdate(float time)
 		{
 			return dialogueAction.OnUpdate(time);
+		}
+
+		public override float GetScoreBasedOnTraits()
+		{
+			var sociableTrait = talker.CharacterTraits[Traits.SOCIALBLE_TRAIT];
+			return base.GetScoreBasedOnTraits();
 		}
 	}
 }
