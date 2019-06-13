@@ -27,6 +27,10 @@
 		{
 			"name" : "AgentsPrefabs",
 			"path" : "Prefabs/Agents/"
+		},
+		{
+			"name" : "UIPrefabs",
+			"path" : "Prefabs/UI/"
 		}
 	]
 }

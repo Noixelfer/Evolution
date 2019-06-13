@@ -77,6 +77,12 @@ namespace Evolution.Character
 		public void Update(float time)
 		{
 			UpdateInvalidPoints(time);
+
+			if (InCriticalCondition())
+			{
+				PickSurvivingAction();
+				return;
+			}
 			if (currentAction == null)
 			{
 				if (actionsToExecute.Count > 0)
@@ -135,6 +141,12 @@ namespace Evolution.Character
 			foreach (var key in pendingInvalidPoints.Keys)
 				invalidPoints.Add(key, pendingInvalidPoints[key]);
 			pendingInvalidPoints.Clear();
+		}
+
+		private void PickSurvivingAction()
+		{
+			var sleepAction = new Sleep(agent);
+
 		}
 
 		private void PickAction()
@@ -239,6 +251,18 @@ namespace Evolution.Character
 
 			var randomIndice = Random.Range(0, bestActions.Count);
 			return bestActions[randomIndice];
+		}
+
+
+		/// <summary>
+		/// Returns true if Energy or Hunger is lower than a given treshold, false otherwise
+		/// </summary>
+		private bool InCriticalCondition()
+		{
+			var energyPercentage = agent.StatsManager.Energy.Percentage;
+			var hungerPercentage = agent.StatsManager.Hunger.Percentage;
+
+			return (energyPercentage <= Constants.ENERGY_CRITICAL_TRESHOLD || hungerPercentage <= Constants.HUNGER_CRITICAL_TRESHOLD);
 		}
 
 		private class ActionScore

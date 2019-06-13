@@ -6,6 +6,8 @@ namespace Evolution.Character
 	{
 		private static int currentID = 0;
 		private Dictionary<int, Agent> allAgents = new Dictionary<int, Agent>();
+		public Dictionary<int, Agent> AllAgents => allAgents;
+
 		public Game Game => Game.Instance;
 
 		public AgentsManager()

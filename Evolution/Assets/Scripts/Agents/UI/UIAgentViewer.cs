@@ -29,16 +29,25 @@ namespace Evolution.UI
 			foreach (Transform go in Traits.transform)
 			{
 				if (go.GetComponent<UITrait>() != null)
-					Destroy(go);
+					Destroy(go.gameObject);
 			}
 
 			foreach (var trait in agent.CharacterTraits)
 			{
-				var uITrait = Instantiate(Game.Instance.PrefabsManager.GetPrefab<UITrait>("UITrait"));
+				var uITrait = Instantiate(Game.Instance.PrefabsManager.GetPrefab<UITrait>("UITrait"), Traits.transform);
 				uITrait.SetName(trait.Value.Name);
 				uITrait.SetPercentage(trait.Value.Percentage);
-				uITrait.transform.SetParent(Traits.transform);
 			}
+		}
+
+		private void Start()
+		{
+
+		}
+
+		private void OnDestroy()
+		{
+
 		}
 	}
 }

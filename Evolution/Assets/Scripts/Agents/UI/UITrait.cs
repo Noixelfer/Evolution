@@ -11,7 +11,7 @@ namespace Evolution.UI
 
 		private void Awake()
 		{
-			traitName = GetComponent<TextMeshProUGUI>();
+			traitName = GetComponentInChildren<TextMeshProUGUI>();
 			fillImage = transform.Find("PercentageBar").GetComponent<Image>();
 
 		}
