@@ -4,6 +4,8 @@ namespace Evolution.Character
 {
 	public class HungerStat : BaseStat<float>
 	{
+		public override string Name { get; } = "Hunger";
+
 		public HungerStat(Agent owner, float maxValue, float minValue = 0) : base(owner)
 		{
 			MinValue = minValue;
@@ -11,9 +13,6 @@ namespace Evolution.Character
 		}
 
 		private float currentHunger = 0;
-		private readonly float regenerationRate = -0.15f;
-
-		public override string Name { get; } = "Hunger";
 		public override float Value
 		{
 			get
@@ -29,8 +28,10 @@ namespace Evolution.Character
 
 		public override void UpdateStat(float deltaTime)
 		{
-			currentHunger += regenerationRate * deltaTime;
+			currentHunger -= Constants.HUNGER_DECREASE_RATE * deltaTime;
 			Mathf.Clamp(currentHunger, MinValue, MaxValue);
 		}
+
+		public override float Percentage => Value / (MaxValue - MinValue);
 	}
 }

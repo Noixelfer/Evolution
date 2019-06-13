@@ -9,6 +9,7 @@
 		}
 		public Agent Owner => owner;
 		public abstract string Name { get; }
+		public virtual T Percentage { get; } 
 		public abstract T Value { get; protected set; }
 		public virtual T RegenerationRate { get; }
 

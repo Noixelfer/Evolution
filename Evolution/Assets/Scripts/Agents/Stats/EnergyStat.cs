@@ -27,6 +27,8 @@ namespace Evolution.Character
 			}
 		}
 
+		public override float Percentage => Value / (MaxValue - MinValue);
+
 		public override void UpdateStat(float deltaTime)
 		{
 			currentEnergy += regenerationRate * deltaTime;
