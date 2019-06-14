@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Evolution.Character
@@ -34,9 +35,9 @@ namespace Evolution.Character
 			var traits = new Dictionary<string, Trait>();
 			foreach (var trait in AllTraits)
 			{
-				trait.Value.Percentage = Random.Range(0f, 1f);
-				traits.Add(trait.Key, trait.Value);
-				Debug.LogWarning(trait.Key + trait.Value.Percentage.ToString());
+				var newTrait = new Trait(trait.Value.Name, trait.Value.OppositeTrait);
+				newTrait.Percentage = Random.Range(0f, 1f);
+				traits.Add(newTrait.Name, newTrait);
 			}
 			return traits;
 		}

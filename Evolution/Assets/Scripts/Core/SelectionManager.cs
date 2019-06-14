@@ -26,21 +26,18 @@ namespace Evolution
 				remainingKeys.Add(key);
 			remainingKeys.ExceptWith(visitedAgentsKeys);
 
-			if (remainingKeys.Count > 0)
-			{
-				var agentID = remainingKeys.ToList()[0];
-				visitedAgentsKeys.Add(agentID);
-				SelectAgent(AgentsManager.AllAgents[agentID]);
-				SelectedAgent = AgentsManager.AllAgents[agentID];
-			}
-			else
+			if (remainingKeys.Count == 0)
 			{
 				visitedAgentsKeys.Clear();
-				var agent = AgentsManager.AllAgents.GetEnumerator().Current;
-				visitedAgentsKeys.Add(agent.Key);
-				SelectAgent(agent.Value);
-				SelectedAgent = agent.Value;
+				foreach (var key in AgentsManager.AllAgents.Keys)
+					remainingKeys.Add(key);
 			}
+
+			var agentID = remainingKeys.ToList()[0];
+			visitedAgentsKeys.Add(agentID);
+			SelectAgent(AgentsManager.AllAgents[agentID]);
+			SelectedAgent = AgentsManager.AllAgents[agentID];
+
 		}
 
 		private void SelectAgent(Agent agent)

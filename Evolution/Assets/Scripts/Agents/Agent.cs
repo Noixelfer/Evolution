@@ -41,7 +41,7 @@ namespace Evolution.Character
 			base.Awake();
 			Game.Instance.AgentsManager?.Register(this);
 			brain = new Brain(this);
-			CharacterTraits = Traits.GetRandomTraits();
+			this.CharacterTraits = Traits.GetRandomTraits();
 			StatsManager = new StatsManager(this);
 			RelationController = new RelationController(this, brain);
 			UIAgentStatus = GetComponentInChildren<UIAgentStatus>();
