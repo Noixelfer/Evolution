@@ -119,6 +119,11 @@ namespace Evolution.Actions
 			return newPosition;
 		}
 
+		private HashSet<AStarNode> nodes = new HashSet<AStarNode>();
+		private HashSet<(int, int)> visitedNodes = new HashSet<(int, int)>();
+		private HashSet<(int, int)> nodesEntries = new HashSet<(int, int)>();
+
+		private Stack<(int, int)> finalPath = new Stack<(int, int)>();
 		private Stack<(int, int)> AStarSearch(MapGraph graph, Vector2 startPosition, Vector2 endPosition)
 		{
 			var startNode = graph.GetNode((int)startPosition.x, (int)startPosition.y);
@@ -129,12 +134,13 @@ namespace Evolution.Actions
 				Debug.LogError("Invalid start or end node!");
 				return null;
 			}
-
-			HashSet<AStarNode> nodes = new HashSet<AStarNode>();
-			HashSet<(int, int)> visitedNodes = new HashSet<(int, int)>();
-			var finalPath = new Stack<(int, int)>();
+			nodes.Clear();
+			visitedNodes.Clear();
+			nodesEntries.Clear();
+			finalPath.Clear();
 			var currentNode = new AStarNode(null, startNode.xPosition, startNode.yPosition, 0, GetDistance(startNode.xPosition, startNode.yPosition, endNode.xPosition, endNode.yPosition));
 			nodes.Add(currentNode);
+			nodesEntries.Add((startNode.xPosition, startNode.yPosition));
 
 			while (nodes.Count > 0)
 			{
@@ -146,8 +152,6 @@ namespace Evolution.Actions
 
 				var minDistance = nodes.Min(n => n.TotalDistance);
 				var bestNode = nodes.First(n => n.TotalDistance == minDistance);
-				if (nodes.Count > 2000 || bestNode.DistanceFromStart > 15)
-					break;
 
 				if (bestNode.DistanceToFinish == 0)
 				{
@@ -163,6 +167,7 @@ namespace Evolution.Actions
 
 				visitedNodes.Add((bestNode.xPosition, bestNode.yPosition));
 				nodes.Remove(bestNode);
+				nodesEntries.Remove((bestNode.xPosition, bestNode.yPosition));
 				AddNeighbours(ref nodes, visitedNodes, graph, bestNode, endNode);
 			}
 
@@ -176,10 +181,13 @@ namespace Evolution.Actions
 			var neighbours = graph.GetNodeNeighbours(node);
 			foreach (var neighbour in neighbours)
 			{
-				if (!visitedNodes.Contains((neighbour.xPosition, neighbour.yPosition)))
+				if (!visitedNodes.Contains((neighbour.xPosition, neighbour.yPosition)) && !nodesEntries.Contains((neighbour.xPosition, neighbour.yPosition)))
 				{
+					nodesEntries.Add((neighbour.xPosition, neighbour.yPosition));
 					if (neighbour.xPosition == node.xPosition || neighbour.yPosition == node.yPosition)
+					{
 						nodes.Add(new AStarNode(aStarNode, neighbour.xPosition, neighbour.yPosition, aStarNode.DistanceFromStart + 1, GetDistance(neighbour.xPosition, neighbour.yPosition, endNode.xPosition, endNode.yPosition)));
+					}
 					else
 						nodes.Add(new AStarNode(aStarNode, neighbour.xPosition, neighbour.yPosition, aStarNode.DistanceFromStart + 1.41f, GetDistance(neighbour.xPosition, neighbour.yPosition, endNode.xPosition, endNode.yPosition)));
 				}
