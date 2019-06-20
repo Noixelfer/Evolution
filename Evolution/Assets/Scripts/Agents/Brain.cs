@@ -1,4 +1,5 @@
 ﻿using Evolution.Actions;
+using Evolution.Items;
 using Evolution.Map;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,7 @@ namespace Evolution.Character
 		private MapGraph graph => Game.Instance.MapManager.MapGraph;
 		private Dictionary<(int, int), float> invalidPoints = new Dictionary<(int, int), float>();
 		private Dictionary<(int, int), float> pendingInvalidPoints = new Dictionary<(int, int), float>();
+		private Needs Needs;
 
 		public Brain(Agent agent)
 		{
@@ -27,6 +29,7 @@ namespace Evolution.Character
 			actionsToExecute = new Stack<IAction>();
 			knownInteractables = new HashSet<string>() { "Agent" };
 			this.agent = agent;
+			Needs = new Needs(this, agent);
 		}
 
 		public void AddKnownInteractable(string interactableID)
@@ -78,11 +81,11 @@ namespace Evolution.Character
 		{
 			UpdateInvalidPoints(time);
 
-			if (InCriticalCondition())
-			{
-				PickSurvivingAction();
-				return;
-			}
+			//if (InCriticalCondition())
+			//{
+			//	PickSurvivingAction();
+			//	return;
+			//}
 			if (currentAction == null)
 			{
 				if (actionsToExecute.Count > 0)
@@ -128,7 +131,7 @@ namespace Evolution.Character
 		private void UpdateInvalidPoints(float deltaTime)
 		{
 			var pointsToBeRemoved = new HashSet<(int, int)>();
-			var keys = invalidPoints.Keys;
+			var keys = new HashSet<(int, int)>(invalidPoints.Keys);
 			foreach (var key in keys)
 			{
 				invalidPoints[key] -= deltaTime;
@@ -146,7 +149,6 @@ namespace Evolution.Character
 
 		private void PickSurvivingAction()
 		{
-			var sleepAction = new Sleep(agent);
 
 		}
 
@@ -156,11 +158,13 @@ namespace Evolution.Character
 			var interactables = Game.Instance.InteractablesManager.GetInteractablesAround(agent.Transform.position, 6f);
 
 			//Get the list of possible actions
-			List<ActionScore> possbileActions = new List<ActionScore>();
-			List<string> interactablesType = new List<string>();
+			HashSet<ActionScore> possbileActions = GetCurrentAvailableActions();
+			HashSet<string> interactablesType = new HashSet<string>();
 
 			foreach (var interactable in interactables)
 			{
+				if (interactable.Equals(agent))
+					continue;
 				if (!interactablesType.Contains(interactable.ID))
 				{
 					interactablesType.Add(interactable.ID);
@@ -179,11 +183,7 @@ namespace Evolution.Character
 				}
 			}
 
-			//TODO : Score the actions
-			foreach (var action in possbileActions)
-			{
-				action.Score = action.Action.GetScoreBasedOnTraits();
-			}
+			CalculateScoreForActions(possbileActions);
 
 			//Pick an action from best actions
 			var pickedAction = ChooseAction(possbileActions);
@@ -228,7 +228,23 @@ namespace Evolution.Character
 			}
 		}
 
-		private ActionScore ChooseAction(List<ActionScore> actions)
+		private void CalculateScoreForActions(HashSet<ActionScore> possibleActions)
+		{
+			foreach (var action in possibleActions)
+			{
+				action.Score = action.Action.GetScoreBasedOnTraits();
+				action.Score = Mathf.Clamp(action.Score + Random.Range(-0.12f, 0.12f), 0, 1);
+				//Add score for basic needs
+				if (action.Action.Effects.Contains(ActionEffects.RESTORE_HUNGER))
+					action.Score += Needs.GetHungerNeed();
+				if (action.Action.Effects.Contains(ActionEffects.OBTAINS_FOOD))
+					action.Score += Needs.GetHungerNeed() * 0.6f;
+				if (action.Action.Effects.Contains(ActionEffects.RESTORE_ENERGY))
+					action.Score += Needs.GetSleepNeed();
+			}
+		}
+
+		private ActionScore ChooseAction(HashSet<ActionScore> actions)
 		{
 			float maxScore = 0;
 			List<ActionScore> bestActions = new List<ActionScore>();
@@ -277,6 +293,22 @@ namespace Evolution.Character
 				Action = action;
 				Interactable = interactable;
 			}
+		}
+
+		/// <summary>
+		/// Gets the list of available actions for our agent without the interaction with the environment
+		/// </summary>
+		private HashSet<ActionScore> GetCurrentAvailableActions()
+		{
+			var availableActions = new HashSet<ActionScore>();
+			//He will always be able to sleep
+			var sleepTime = 5 * Constants.HOUR_IN_SECONDS;
+			availableActions.Add(new ActionScore(new Sleep(agent, sleepTime), agent));
+			foreach (var item in agent.Inventory.GetItemsOfType<BaseEdibleItem>())
+			{
+				var action = new Eat(agent, item.Key);
+			}
+			return availableActions;
 		}
 	}
 }
