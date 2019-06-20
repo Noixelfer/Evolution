@@ -11,7 +11,7 @@ namespace Evolution.Map
 		public float TreesAmount = 0.5f;
 		public float RocksAmount = 0.5f;
 		public float WaterAmount = 0.5f;
-		public float InitialPopulationAmount;
+		public int InitialPopulationAmount = 6;
 
 		//Water Ponds
 		public float waterPondsNoiseScale = 5;
@@ -45,7 +45,7 @@ namespace Evolution.Map
 			PlaceResourceFromNoise<NaturalResource>(rockNoiseScale, rockMinValue, RocksAmount, "stones.json");
 
 			//Place Agents
-			GenerateAgents(6);
+			GenerateAgents(InitialPopulationAmount);
 			//Create the MapGraph for our current Map
 			MapGraph = new MapGraph(Map);
 		}

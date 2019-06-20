@@ -9,6 +9,7 @@ namespace Evolution.UI
 		public Slider TreesSlider;
 		public Slider RocksSlider;
 		public Slider WaterSlider;
+		public InputField InitialPopulation;
 		private bool started = false;
 		private Game Game => Game.Instance;
 
@@ -22,6 +23,8 @@ namespace Evolution.UI
 				TreesSlider.value = Game.MapManager.TreesAmount;
 				RocksSlider.value = Game.MapManager.RocksAmount;
 				WaterSlider.value = Game.MapManager.WaterAmount;
+				if (InitialPopulation != null)
+					InitialPopulation.text = Game.MapManager.InitialPopulationAmount.ToString();
 			}
 		}
 
@@ -48,6 +51,8 @@ namespace Evolution.UI
 
 		public void OnInitialPopulationChanged()
 		{
+			if (Game != null && Game.MapManager != null)
+				Game.MapManager.InitialPopulationAmount = int.Parse(InitialPopulation.text);
 		}
 
 		private void OnTreesValueChanged(float value)
