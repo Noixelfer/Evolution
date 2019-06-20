@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -9,6 +10,8 @@ namespace Evolution.UI
 		public Slider TreesSlider;
 		public Slider RocksSlider;
 		public Slider WaterSlider;
+		public TMP_Dropdown MapSize;
+
 		public InputField InitialPopulation;
 		private bool started = false;
 		private Game Game => Game.Instance;
@@ -18,6 +21,7 @@ namespace Evolution.UI
 			TreesSlider?.onValueChanged.AddListener(OnTreesValueChanged);
 			RocksSlider?.onValueChanged.AddListener(OnRocksValueChanged);
 			WaterSlider?.onValueChanged.AddListener(OnWaterValueChanged);
+			MapSize?.onValueChanged.AddListener(OnMapSizeChanged);
 			if (Game != null && Game.MapManager != null)
 			{
 				TreesSlider.value = Game.MapManager.TreesAmount;
@@ -33,6 +37,7 @@ namespace Evolution.UI
 			TreesSlider?.onValueChanged.RemoveListener(OnTreesValueChanged);
 			RocksSlider?.onValueChanged.RemoveListener(OnRocksValueChanged);
 			WaterSlider?.onValueChanged.RemoveListener(OnWaterValueChanged);
+			MapSize?.onValueChanged.RemoveListener(OnMapSizeChanged);
 		}
 
 		private void Start()
@@ -45,7 +50,7 @@ namespace Evolution.UI
 			if (started)
 				return;
 			started = true;
-			Game.MapManager.GenerateMap(100, 100);
+			Game.MapManager.GenerateMap(Game.MAP_SIZE, Game.MAP_SIZE);
 			SceneManager.LoadScene("Scene0");
 		}
 
@@ -71,6 +76,31 @@ namespace Evolution.UI
 		{
 			if (Game != null && Game.MapManager != null)
 				Game.MapManager.WaterAmount = value;
+		}
+
+		private void OnMapSizeChanged(int value)
+		{
+			if (Game != null)
+			{
+				switch (value)
+				{
+					case 0:
+						Game.MAP_SIZE = 100;
+						break;
+					case 1:
+						Game.MAP_SIZE = 150;
+						break;
+					case 2:
+						Game.MAP_SIZE = 210;
+						break;
+					case 3:
+						Game.MAP_SIZE = 300;
+						break;
+					default:
+						Game.MAP_SIZE = 100;
+						break;
+				}
+			}
 		}
 
 	}
