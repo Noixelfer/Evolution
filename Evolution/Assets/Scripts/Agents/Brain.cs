@@ -128,7 +128,8 @@ namespace Evolution.Character
 		private void UpdateInvalidPoints(float deltaTime)
 		{
 			var pointsToBeRemoved = new HashSet<(int, int)>();
-			foreach (var key in invalidPoints.Keys)
+			var keys = invalidPoints.Keys;
+			foreach (var key in keys)
 			{
 				invalidPoints[key] -= deltaTime;
 				if (invalidPoints[key] <= 0)
