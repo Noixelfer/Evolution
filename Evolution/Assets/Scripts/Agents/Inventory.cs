@@ -8,7 +8,6 @@ namespace Evolution.Items
 	{
 		private Dictionary<IItem, int> items = new Dictionary<IItem, int>();
 		private Agent owner;
-		private Dictionary<BaseEdibleItem, int> edibleItems = new Dictionary<BaseEdibleItem, int>();
 		public Inventory(Agent owner)
 		{
 			this.owner = owner;
@@ -37,22 +36,10 @@ namespace Evolution.Items
 				Debug.LogError("Tried to add 0 or negative amount of items of type " + item + " in inventory!!!");
 				return;
 			}
-
-			if (item is BaseEdibleItem)
-			{
-				var edibletem = (BaseEdibleItem)item;
-				if (edibleItems.ContainsKey(edibletem))
-					edibleItems[edibletem] += quantity;
-				else
-					edibleItems.Add(edibletem, quantity);
-			}
+			if (HasItem(item))
+				items[item] += quantity;
 			else
-			{
-				if (HasItem(item))
-					items[item] += quantity;
-				else
-					items.Add(item, quantity);
-			}
+				items.Add(item, quantity);
 		}
 
 		/// <summary>
@@ -67,11 +54,6 @@ namespace Evolution.Items
 				if (key is T)
 					result.Add((T)key, items[key]);
 			return result;
-		}
-
-		public Dictionary<BaseEdibleItem, int> GetEdibleItems()
-		{
-			return edibleItems;
 		}
 
 		public void RemoveItem(IItem item)

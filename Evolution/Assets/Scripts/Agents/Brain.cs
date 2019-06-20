@@ -1,4 +1,5 @@
 ﻿using Evolution.Actions;
+using Evolution.Items;
 using Evolution.Map;
 using System.Collections.Generic;
 using UnityEngine;
@@ -153,6 +154,7 @@ namespace Evolution.Character
 
 		}
 
+		private float minDistance;
 		private void PickAction()
 		{
 			//Scan for interactables
@@ -191,7 +193,9 @@ namespace Evolution.Character
 
 			if ((agent.Transform.position - pickedAction.Interactable.gameObject.transform.position).sqrMagnitude >= 3f)
 			{
-				//Get a free tile around the given interactable
+				//Get the closest free tile from our current interractable
+				minDistance = 100000;
+
 				var posX = (int)pickedAction.Interactable.gameObject.transform.position.x;
 				var posY = (int)pickedAction.Interactable.gameObject.transform.position.y;
 
@@ -201,8 +205,12 @@ namespace Evolution.Character
 					var node = graph.GetNode(posX + offset.Item1, posY + offset.Item2);
 					if (node != null && !invalidPoints.ContainsKey((node.xPosition, node.yPosition)))
 					{
-						endNode = node;
-						break;
+						var squaredDistance = (posX - agent.transform.position.x) * (posX - agent.transform.position.x) + (posY - agent.transform.position.y) * (posY - agent.transform.position.y);
+						if (squaredDistance < minDistance)
+						{
+							minDistance = squaredDistance;
+							endNode = node;
+						}
 					}
 				}
 
@@ -307,7 +315,7 @@ namespace Evolution.Character
 			//He will always be able to sleep
 			var sleepTime = 5 * Constants.HOUR_IN_SECONDS;
 			availableActions.Add(new ActionScore(new Sleep(agent, sleepTime), agent));
-			foreach (var item in agent.Inventory.GetEdibleItems())
+			foreach (var item in agent.Inventory.GetItemsOfType<BaseEdibleItem>())
 			{
 				var action = new Eat(agent, item.Key, 0.4f * Constants.HOUR_IN_SECONDS);
 				availableActions.Add(new ActionScore(action, agent));
