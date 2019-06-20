@@ -26,6 +26,7 @@ public class CameraMovement : MonoBehaviour
 
 		ZoomInOut();
 		MoveCamera();
+		FocusSelectedAgent();
 		ClampPosition();
 	}
 
@@ -51,6 +52,22 @@ public class CameraMovement : MonoBehaviour
 		return 1;
 	}
 
+	private void FocusSelectedAgent()
+	{
+		if (Input.GetKeyDown(KeyCode.F))
+		{
+			if (Game.Instance != null && Game.Instance.SelectionManager != null)
+			{
+				var selectedAgent = Game.Instance.SelectionManager.SelectedAgent;
+				if (selectedAgent != null)
+				{
+					Camera.transform.position = new Vector3(selectedAgent.transform.position.x, selectedAgent.transform.position.y, Camera.transform.position.z);
+					Camera.orthographicSize = MIN_DISTANCE * 2;
+				}
+			}
+		}
+	}
+
 	private void ClampPosition()
 	{
 		var ortographicSize = Camera.orthographicSize;
@@ -69,7 +86,7 @@ public class CameraMovement : MonoBehaviour
 		if (transform.position.x < width / 2.0f - 0.5f)
 			newX = width / 2.0f - 0.5f;
 
-		if (transform.position.x > Game.Instance.MAP_SIZE -  width / 2.0f - 0.5f)
+		if (transform.position.x > Game.Instance.MAP_SIZE - width / 2.0f - 0.5f)
 			newX = Game.Instance.MAP_SIZE - width / 2.0f - 0.5f;
 
 		transform.position = new Vector3(newX, newY, transform.position.z);
