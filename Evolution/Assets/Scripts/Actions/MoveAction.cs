@@ -3,6 +3,7 @@ using Evolution.Map;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Evolution.Actions
@@ -25,6 +26,7 @@ namespace Evolution.Actions
 		private Vector3 invalidVector = new Vector3(-999, -999, -999);
 		private Vector3 targetPos;
 		private bool searchCanceled = false;
+		private CancellationToken CancellationToken = new CancellationToken(true);
 
 		public MoveAction(Agent agent, Vector2 destination)
 		{
@@ -40,7 +42,16 @@ namespace Evolution.Actions
 			startTime = Time.time;
 			targetPos = invalidVector;
 			searchCanceled = false;
-			ThreadPool.QueueUserWorkItem((_) => SearchForPath(posX, posY));
+			//ThreadPool.QueueUserWorkItem((_) => SearchForPath(posX, posY));
+			SearchForPathAsync(posX, posY);
+		}
+
+		private async void SearchForPathAsync(int posX, int posY)
+		{
+			Debug.Log("SearchForPathAsyncStarted");
+			Task t = Task.Run(async () => SearchForPath(posX, posY));
+			await t;
+			Debug.Log("SearchForPathAsyncDone");
 		}
 
 		private void SearchForPath(int posX, int posY)
@@ -194,6 +205,12 @@ namespace Evolution.Actions
 			public float DistanceFromStart;
 			public float DistanceToFinish;
 			public float TotalDistance => DistanceFromStart + DistanceToFinish;
+		}
+
+		public override void OnApllicationQuit()
+		{
+			base.OnApllicationQuit();
+			searchCanceled = true;
 		}
 	}
 }

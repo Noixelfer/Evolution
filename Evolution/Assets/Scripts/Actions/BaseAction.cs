@@ -72,5 +72,10 @@ namespace Evolution.Actions
 		{
 			return 0;
 		}
+
+		public virtual void OnApllicationQuit()
+		{
+
+		}
 	}
 }

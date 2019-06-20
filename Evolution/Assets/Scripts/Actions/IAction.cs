@@ -31,5 +31,6 @@ namespace Evolution.Actions
 		void Pause();
 		void SetStatus(ActionStatus status);
 		float GetScoreBasedOnTraits();
+		void OnApllicationQuit();
 	}
 }

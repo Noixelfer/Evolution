@@ -1,5 +1,4 @@
-﻿using Evolution.Utils;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Evolution.Actions
@@ -60,6 +59,12 @@ namespace Evolution.Actions
 				actions.Remove(action);
 			actionsToBeAdded.Clear();
 			actionsToBeRemoved.Clear();
+		}
+
+		private void OnApplicationQuit()
+		{
+			foreach (var action in actions)
+				action?.OnApllicationQuit();
 		}
 	}
 }
