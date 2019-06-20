@@ -26,6 +26,7 @@ public class CameraMovement : MonoBehaviour
 
 		ZoomInOut();
 		MoveCamera();
+		ClampPosition();
 	}
 
 	private void ZoomInOut()
@@ -48,5 +49,29 @@ public class CameraMovement : MonoBehaviour
 		if (Input.GetKey(KeyCode.LeftShift))
 			return FAST_MODE_MULTIPLIER;
 		return 1;
+	}
+
+	private void ClampPosition()
+	{
+		var ortographicSize = Camera.orthographicSize;
+		var height = 2f * ortographicSize;
+		float width = height * Camera.aspect;
+
+		//left corner
+		float newX = transform.position.x;
+		float newY = transform.position.y;
+		if (transform.position.y < height / 2.0f - 0.5f)
+			newY = height / 2.0f - 0.5f;
+
+		if (transform.position.y > Game.Instance.MAP_SIZE - height / 2.0f - 0.5f)
+			newY = Game.Instance.MAP_SIZE - height / 2.0f - 0.5f;
+
+		if (transform.position.x < width / 2.0f - 0.5f)
+			newX = width / 2.0f - 0.5f;
+
+		if (transform.position.x > Game.Instance.MAP_SIZE -  width / 2.0f - 0.5f)
+			newX = Game.Instance.MAP_SIZE - width / 2.0f - 0.5f;
+
+		transform.position = new Vector3(newX, newY, transform.position.z);
 	}
 }

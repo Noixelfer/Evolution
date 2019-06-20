@@ -37,6 +37,7 @@ namespace Evolution
 		public SelectionManager SelectionManager;
 		public InteractablesManager InteractablesManager;
 		public InputManager InputManager;
+		public float MAP_SIZE = 100;
 
 		private void Awake()
 		{
