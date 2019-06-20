@@ -48,6 +48,7 @@ namespace Evolution.Map
 			GenerateAgents(InitialPopulationAmount);
 			//Create the MapGraph for our current Map
 			MapGraph = new MapGraph(Map);
+			Game.Instance?.InteractablesManager?.DisableUnreachableIInteractables();
 		}
 
 		private float[,] GetNoiseMap(int width, int height, float scale)

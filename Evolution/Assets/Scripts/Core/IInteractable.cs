@@ -13,5 +13,7 @@ namespace Evolution
 		string ID { get; }
 		GameObject gameObject { get; }
 		List<IAction> GetPossibleActions(Agent agent);
+		HashSet<(int, int)> FreeNeighbourCells { get; }
+		bool Reachable { get; set; }
 	}
 }

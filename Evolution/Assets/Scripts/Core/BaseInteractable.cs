@@ -7,6 +7,10 @@ using UnityEngine;
 public abstract class BaseInteractable : MonoBehaviour, IInteractable
 {
 	public abstract string ID { get; }
+
+	public HashSet<(int, int)> FreeNeighbourCells { get; protected set; } = new HashSet<(int, int)>();
+	public bool Reachable { get; set; } = true;
+
 	private List<IAction> actions = new List<IAction>();
 	private bool loadedActionsFromJson = false;
 
