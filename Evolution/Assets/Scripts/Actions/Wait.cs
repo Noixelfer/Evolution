@@ -23,6 +23,7 @@ namespace Evolution.Actions
 		{
 			Requester = requester;
 			this.waitTime = waitTime;
+			Description = "Waiting for " + requester.AGENT_ID;
 		}
 
 		public void Resolve()

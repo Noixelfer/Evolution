@@ -1,26 +1,38 @@
 ﻿using Evolution.Character;
-using UnityEngine;
+using System.Collections.Generic;
 
 namespace Evolution.Actions
 {
 	public class Sleep : BaseAction
 	{
 		public override string ID => "Sleep";
-		private Agent agent;
+		public override string Description { get; protected set; } = "Sleeping";
+		public override HashSet<string> Effects { get; set; } = new HashSet<string>()
+		{
+			ActionEffects.RESTORE_ENERGY
+		};
 
-		public Sleep(Agent agent)
+		private Agent agent;
+		private float time;
+		public Sleep(Agent agent, float time)
 		{
 			this.agent = agent;
+			this.time = time;
 		}
 
-		/// <summary>
-		/// f(x) = [(x^3 + x^(1/3)) + 0.6x]/2
-		/// </summary>
-		/// <returns></returns>
+		public override ActionStatus OnUpdate(float deltaTime)
+		{
+			time -= deltaTime;
+			agent.StatsManager.Energy.ModifyValue(agent.StatsManager.Energy.MaxValue / (7 * Constants.HOUR_IN_SECONDS) * deltaTime);
+			if (time <= 0 || agent.StatsManager.Energy.Percentage >= 0.95f)
+				return ActionStatus.SUCCESSFULLY_EXECUTED;
+			return base.OnUpdate(time);
+		}
+
+		//Returns a base score for sleep
 		public override float GetScoreBasedOnTraits()
 		{
-			var x = agent.StatsManager.Energy.Percentage;
-			return (Mathf.Pow(x, 3) + Mathf.Pow(x, 0.33f) + 0.6f * x) / 2;
+			return 0.05f;
 		}
 	}
 }

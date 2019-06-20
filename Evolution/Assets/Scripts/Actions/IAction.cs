@@ -19,6 +19,7 @@ namespace Evolution.Actions
 		Action OnEndAction { get; set; }
 		Action OnPauseAction { get; set; }
 		Action OnFailedAction { get; set; }
+		HashSet<string> Effects { get; }
 
 		string Description { get; }
 		List<string> Categories { get; set; }

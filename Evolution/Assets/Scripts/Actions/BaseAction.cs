@@ -21,6 +21,8 @@ namespace Evolution.Actions
 
 		public ActionStatus Status { get; private set; }
 
+		public virtual HashSet<string> Effects { get; set; } = new HashSet<string>();
+
 		public virtual void Initialize(params object[] parameters)
 		{
 			OnStart();

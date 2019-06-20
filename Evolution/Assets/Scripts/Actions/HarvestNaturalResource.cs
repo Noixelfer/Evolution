@@ -1,4 +1,5 @@
 ﻿using Evolution.Character;
+using Evolution.Items;
 
 namespace Evolution.Actions
 {
@@ -7,12 +8,16 @@ namespace Evolution.Actions
 		public override string ID => "";
 		private Agent agent;
 		private float harvestTime;
+		private IItem resultingItem;
+		private int quantity;
 
-		public HarvestNaturalResource(Agent agent, string actionDescription, float harvestTime)
+		public HarvestNaturalResource(Agent agent, string actionDescription, IItem resultingItem, int quantity, float harvestTime)
 		{
 			this.agent = agent;
 			Description = actionDescription;
 			this.harvestTime = harvestTime;
+			this.resultingItem = resultingItem;
+			this.quantity = quantity;
 		}
 
 		public override void OnStart()
@@ -25,7 +30,10 @@ namespace Evolution.Actions
 		{
 			harvestTime -= time;
 			if (harvestTime <= 0)
+			{
+				agent.Inventory.AddItem(resultingItem, quantity);
 				return ActionStatus.SUCCESSFULLY_EXECUTED;
+			}
 			return ActionStatus.IN_PROGRESS;
 		}
 

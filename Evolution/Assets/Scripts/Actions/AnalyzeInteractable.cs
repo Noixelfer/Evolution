@@ -17,6 +17,7 @@ namespace Evolution.Actions
 
 		public override void OnStart()
 		{
+			Description = "Analyzing " + interactable.ID;
 			base.OnStart();
 		}
 

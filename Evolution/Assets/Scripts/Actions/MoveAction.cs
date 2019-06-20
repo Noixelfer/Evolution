@@ -46,9 +46,11 @@ namespace Evolution.Actions
 
 		private void SearchForPath(int posX, int posY)
 		{
+			Description = "Searching for path...";
 			path = AStarSearch(Game.Instance.MapManager.MapGraph, new Vector2(posX, posY), destination);
 			if (path != null)
 			{
+				Description = "Moving to new position";
 				pathStatus = PathStatus.Found;
 			}
 			else
