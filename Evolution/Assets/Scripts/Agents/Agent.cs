@@ -45,7 +45,7 @@ namespace Evolution.Character
 			StatsManager = new StatsManager(this);
 			RelationController = new RelationController(this, brain);
 			UIAgentStatus = GetComponentInChildren<UIAgentStatus>();
-
+			Inventory = new Inventory(this);
 			if (Game.Instance.SelectionManager.SelectedAgent == null)
 				Game.Instance.SelectionManager.SelectNextAgent();
 			//moveTask.Execute();

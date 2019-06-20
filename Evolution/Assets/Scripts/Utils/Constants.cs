@@ -3,13 +3,13 @@ namespace Evolution
 {
 	public class Constants : MonoBehaviour
 	{
-		public static readonly float HOUR_IN_SECONDS = 10;
-		public static readonly float SECONDS_IN_A_DAY = 2 * HOUR_IN_SECONDS;
-		public static readonly float SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
-		public static readonly float SECONDS_IN_A_YEAR = 40 * SECONDS_IN_A_DAY;
+		public static readonly float HOUR_IN_SECONDS = 360;
+		public static readonly float SECONDS_IN_A_DAY = 4 * HOUR_IN_SECONDS;
+		public static readonly float SECONDS_IN_A_MONTH = 3 * SECONDS_IN_A_DAY;
+		public static readonly float SECONDS_IN_A_YEAR = 3 * SECONDS_IN_A_DAY;
 
 		//-------------------------------------EDITOR------------------------------------------------------------------------------------
-		public float RealTimeMultiplier = 100;
+		public float RealTimeMultiplier = 1000;
 
 
 		//--------------------------------------------------------------------------------------------------------------------------------------------------------------

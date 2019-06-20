@@ -12,6 +12,9 @@
 		public virtual T Percentage { get; } 
 		public abstract T Value { get; protected set; }
 		public virtual T RegenerationRate { get; }
+		public virtual void ModifyValue(T amount)
+		{
+		}
 
 		public T MinValue { get; protected set; }
 

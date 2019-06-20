@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Evolution.Character
@@ -14,6 +13,7 @@ namespace Evolution.Character
 		public static readonly string GREEDY_TRADE = "Greedy";
 		public static readonly string FAST_LEARNER_TRAIT = "Fast Learner";
 		public static readonly string CURIOUS_TRAIT = "Curious";
+		public static readonly string GLUTTON_TRAIT = "Glutton";
 
 		/// <summary>
 		/// List with all available traits
@@ -27,7 +27,8 @@ namespace Evolution.Character
 			{LUST_TRAIT, new Trait(LUST_TRAIT, "Chastity")},
 			{GREEDY_TRADE, new Trait(GREEDY_TRADE, "Generous")},
 			{FAST_LEARNER_TRAIT, new Trait(FAST_LEARNER_TRAIT, "Slow Learner")},
-			{CURIOUS_TRAIT, new Trait(CURIOUS_TRAIT, "Incurious")}
+			{CURIOUS_TRAIT, new Trait(CURIOUS_TRAIT, "Incurious")},
+			{GLUTTON_TRAIT, new Trait(GLUTTON_TRAIT, "Nibbler")}
 		};
 
 		public static Dictionary<string, Trait> GetRandomTraits()
