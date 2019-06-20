@@ -17,7 +17,6 @@ namespace Evolution.Actions
 			Failed = 2
 		}
 
-		private const float AGENT_SPEED = 4f;
 		private Agent Agent;
 		private Vector2 destination;
 		private Stack<(int, int)> path = null;
@@ -36,8 +35,8 @@ namespace Evolution.Actions
 		public override void OnStart()
 		{
 			base.OnStart();
-			int posX = (int)Agent.Transform.position.x;
-			int posY = (int)Agent.Transform.position.y;
+			int posX = (int)(Mathf.Round(Agent.Transform.position.x));
+			int posY = (int)(Mathf.Round(Agent.Transform.position.y));
 			startTime = Time.time;
 			targetPos = invalidVector;
 			searchCanceled = false;
@@ -88,7 +87,7 @@ namespace Evolution.Actions
 
 				if (Agent.Transform.position != targetPos)
 				{
-					Agent.Transform.position = Vector3.MoveTowards(Agent.Transform.position, targetPos, AGENT_SPEED * time);
+					Agent.Transform.position = Vector3.MoveTowards(Agent.Transform.position, targetPos, Constants.AGENT_SPEED_HOUR * time);
 				}
 				else
 				{
@@ -102,10 +101,10 @@ namespace Evolution.Actions
 
 		private Vector3 GetRandomTilePosition((int, int) position)
 		{
-			var xOffset = 0;// Random.Range(-0.45f, 0.45f);
-			var yOffset = 0;// Random.Range(-0.45f, 0.45f);
+			var xOffset = Random.Range(-0.4f, 0.4f);
+			var yOffset = Random.Range(-0.4f, 0.4f);
 
-			var newPosition = new Vector3((int)position.Item1 + xOffset, (int)position.Item2 + yOffset);
+			var newPosition = new Vector3(position.Item1 + xOffset, position.Item2 + yOffset);
 			return newPosition;
 		}
 

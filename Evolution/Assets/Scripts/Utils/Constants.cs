@@ -3,10 +3,10 @@ namespace Evolution
 {
 	public class Constants : MonoBehaviour
 	{
-		public static readonly float HOUR_IN_SECONDS = 360;
-		public static readonly float SECONDS_IN_A_DAY = 4 * HOUR_IN_SECONDS;
-		public static readonly float SECONDS_IN_A_MONTH = 3 * SECONDS_IN_A_DAY;
-		public static readonly float SECONDS_IN_A_YEAR = 3 * SECONDS_IN_A_DAY;
+		public static readonly float HOUR_IN_SECONDS = 5;
+		public static readonly float SECONDS_IN_A_DAY = 24 * HOUR_IN_SECONDS;
+		public static readonly float SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
+		public static readonly float SECONDS_IN_A_YEAR = 360 * SECONDS_IN_A_DAY;
 
 		//-------------------------------------EDITOR------------------------------------------------------------------------------------
 		public float RealTimeMultiplier = 1000;
@@ -14,7 +14,7 @@ namespace Evolution
 
 		//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 		//How much faster time passes comparead to real world time
-		public static float REAL_TIME_MULTIPLIER = 100;
+		public static float REAL_TIME_MULTIPLIER = 200;
 		public static readonly float AGENT_SPEED_HOUR = 10 / (HOUR_IN_SECONDS);
 		public static readonly float COLLECT_APPLE_TIME = 1 * HOUR_IN_SECONDS;
 		public static readonly float MINE_TIME = 1 * HOUR_IN_SECONDS;

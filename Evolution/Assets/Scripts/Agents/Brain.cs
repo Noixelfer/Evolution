@@ -1,5 +1,4 @@
 ﻿using Evolution.Actions;
-using Evolution.Items;
 using Evolution.Map;
 using System.Collections.Generic;
 using UnityEngine;
@@ -142,6 +141,8 @@ namespace Evolution.Character
 			foreach (var key in pointsToBeRemoved)
 				invalidPoints.Remove(key);
 
+			pointsToBeRemoved = null;
+
 			foreach (var key in pendingInvalidPoints.Keys)
 				invalidPoints.Add(key, pendingInvalidPoints[key]);
 			pendingInvalidPoints.Clear();
@@ -155,7 +156,7 @@ namespace Evolution.Character
 		private void PickAction()
 		{
 			//Scan for interactables
-			var interactables = Game.Instance.InteractablesManager.GetInteractablesAround(agent.Transform.position, 6f);
+			var interactables = Game.Instance.InteractablesManager.GetInteractablesAround(agent.Transform.position, 5f);
 
 			//Get the list of possible actions
 			HashSet<ActionScore> possbileActions = GetCurrentAvailableActions();
@@ -298,15 +299,18 @@ namespace Evolution.Character
 		/// <summary>
 		/// Gets the list of available actions for our agent without the interaction with the environment
 		/// </summary>
+		///
+		private HashSet<ActionScore> availableActions = new HashSet<ActionScore>();
 		private HashSet<ActionScore> GetCurrentAvailableActions()
 		{
-			var availableActions = new HashSet<ActionScore>();
+			availableActions.Clear();
 			//He will always be able to sleep
 			var sleepTime = 5 * Constants.HOUR_IN_SECONDS;
 			availableActions.Add(new ActionScore(new Sleep(agent, sleepTime), agent));
-			foreach (var item in agent.Inventory.GetItemsOfType<BaseEdibleItem>())
+			foreach (var item in agent.Inventory.GetEdibleItems())
 			{
-				var action = new Eat(agent, item.Key);
+				var action = new Eat(agent, item.Key, 0.4f * Constants.HOUR_IN_SECONDS);
+				availableActions.Add(new ActionScore(action, agent));
 			}
 			return availableActions;
 		}
