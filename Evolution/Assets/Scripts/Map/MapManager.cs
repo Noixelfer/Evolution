@@ -8,34 +8,41 @@ namespace Evolution.Map
 	{
 		public Map Map;
 		public MapGraph MapGraph;
+		public float TreesAmount = 0.5f;
+		public float RocksAmount = 0.5f;
+		public float WaterAmount = 0.5f;
+		public float InitialPopulationAmount;
 
 		//Water Ponds
 		public float waterPondsNoiseScale = 5;
 		[Range(0, 1)]
-		public float WaterPondsMinValue = 0.74f;
+		public float WaterPondsMinValue = 0.83f;
 		//Trees
 		public float treesNoiseScale = 18;
 		[Range(0, 1)]
-		public float treesMinValue = 0.5f;
+		public float treesMinValue = 0.75f;
 		//Rocks
 		public float rockNoiseScale = 5;
 		[Range(0, 1)]
-		public float rockMinValue = 0.5f;
+		public float rockMinValue = 0.84f;
 
 		private GameObject mapContainer;
+		private GameObject agentsContainer;
 		private ResourceTypeGenerator ResourceTypeGenerator;
+		private readonly float AMOUNT_IMPORTANCE = 0.2f;
 
 		public void GenerateMap(int width, int height)
 		{
+			DontDestroyOnLoad(mapContainer);
 			if (ResourceTypeGenerator == null)
 				ResourceTypeGenerator = new ResourceTypeGenerator();
 
 			Map.Size = new Vector2(width, height);
 			GenerateEmptyMap();
 			//GenerateWaterPonds
-			GenerateTileFromNoise(waterPondsNoiseScale, WaterPondsMinValue, "water.json");
-			PlaceResourceFromNoise<NaturalResource>(treesNoiseScale, treesMinValue, "trees.json");
-			PlaceResourceFromNoise<NaturalResource>(rockNoiseScale, rockMinValue, "stones.json");
+			GenerateTileFromNoise(waterPondsNoiseScale, WaterPondsMinValue, WaterAmount, "water.json");
+			PlaceResourceFromNoise<NaturalResource>(treesNoiseScale, treesMinValue, TreesAmount, "trees.json");
+			PlaceResourceFromNoise<NaturalResource>(rockNoiseScale, rockMinValue, RocksAmount, "stones.json");
 
 			//Place Agents
 			GenerateAgents(6);
@@ -61,7 +68,7 @@ namespace Evolution.Map
 			return result;
 		}
 
-		private void GenerateTileFromNoise(float scale, float minValue, string id, bool decoration = false)
+		private void GenerateTileFromNoise(float scale, float minValue, float amount, string id, bool decoration = false)
 		{
 			var noiseMap = GetNoiseMap((int)Map.Size.x, (int)Map.Size.y, scale);
 			for (int x = 0; x < Map.Size.x; x++)
@@ -69,7 +76,7 @@ namespace Evolution.Map
 				for (int y = 0; y < Map.Size.y; y++)
 				{
 					var position = new Vector2(x, y);
-					if (Map.FreeTile(position) && noiseMap[x, y] >= minValue)
+					if (Map.FreeTile(position) && noiseMap[x, y] >= minValue - amount * AMOUNT_IMPORTANCE)
 					{
 						var resourcePrefabName = ResourceTypeGenerator.GetResourcePrefabName(id);
 						if (resourcePrefabName != null && resourcePrefabName != "")
@@ -95,7 +102,7 @@ namespace Evolution.Map
 			}
 		}
 
-		private void PlaceResourceFromNoise<T>(float scale, float minValue, string id) where T : NaturalResource
+		private void PlaceResourceFromNoise<T>(float scale, float minValue, float amount, string id) where T : NaturalResource
 		{
 			var noiseMap = GetNoiseMap((int)Map.Size.x, (int)Map.Size.y, scale);
 			for (int x = 0; x < Map.Size.x; x++)
@@ -103,7 +110,7 @@ namespace Evolution.Map
 				for (int y = 0; y < Map.Size.y; y++)
 				{
 					var position = new Vector2(x, y);
-					if (Map.FreeTile(position) && noiseMap[x, y] >= minValue)
+					if (Map.FreeTile(position) && noiseMap[x, y] >= minValue - amount * AMOUNT_IMPORTANCE)
 					{
 						var resourcePrefabName = ResourceTypeGenerator.GetResourcePrefabName(id);
 						if (resourcePrefabName != null && resourcePrefabName != "")
@@ -167,6 +174,12 @@ namespace Evolution.Map
 			{
 				var agent = Instantiate(Game.Instance.PrefabsManager.GetPrefab<Agent>("female_agent"));
 				agent.transform.position = new Vector3(tileX, tileY, 0);
+				if (agentsContainer == null)
+				{
+					agentsContainer = new GameObject("Agents Container");
+					DontDestroyOnLoad(agentsContainer);
+				}
+				agent.transform.parent = agentsContainer.transform;
 			}
 		}
 
@@ -176,7 +189,6 @@ namespace Evolution.Map
 			if (mapContainer == null)
 				mapContainer = new GameObject("MapContainer");
 			Map = new Map();
-			GenerateMap(100, 100);
 		}
 
 		private void Update()

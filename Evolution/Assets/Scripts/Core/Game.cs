@@ -49,6 +49,7 @@ namespace Evolution
 			ActionsManager = Utility.AddComponentIfNotExisting<ActionsManager>(gameObject);
 			InteractablesManager = Utility.AddComponentIfNotExisting<InteractablesManager>(gameObject);
 			ThreadPool.SetMaxThreads(20, 20);
+			DontDestroyOnLoad(this.gameObject);
 		}
 
 		private void Update()
