@@ -143,8 +143,11 @@ namespace Evolution.Actions
 					Debug.LogError("Thread successfully stopped with force");
 					break;
 				}
+
 				var minDistance = nodes.Min(n => n.TotalDistance);
 				var bestNode = nodes.First(n => n.TotalDistance == minDistance);
+				if (nodes.Count > 1000 || bestNode.DistanceFromStart > 12)
+					break;
 
 				if (bestNode.DistanceToFinish == 0)
 				{
