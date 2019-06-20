@@ -161,17 +161,18 @@ namespace Evolution.Map
 			bool foundTile = false;
 			int tileX = 0;
 			int tileY = 0;
-			while (!foundTile)
-			{
-				tileX = (int)Random.Range(0, Map.Size.x);
-				tileY = (int)Random.Range(0, Map.Size.y);
-
-				if (!Map.GetTileValue(new Vector2(tileX, tileY)).Occupied)
-					foundTile = true;
-			}
-
 			for (int i = 0; i < numberOfAgents; i++)
 			{
+				foundTile = false;
+				while (!foundTile)
+				{
+					tileX = (int)Random.Range(0, Map.Size.x);
+					tileY = (int)Random.Range(0, Map.Size.y);
+
+					if (!Map.GetTileValue(new Vector2(tileX, tileY)).Occupied)
+						foundTile = true;
+				}
+
 				var agent = Instantiate(Game.Instance.PrefabsManager.GetPrefab<Agent>("female_agent"));
 				agent.transform.position = new Vector3(tileX, tileY, 0);
 				if (agentsContainer == null)
