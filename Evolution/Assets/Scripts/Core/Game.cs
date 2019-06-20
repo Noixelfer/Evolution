@@ -41,6 +41,9 @@ namespace Evolution
 
 		private void Awake()
 		{
+			if (Instance != null && Instance != this)
+				Destroy(this.gameObject);
+
 			PrefabsManager = new PrefabsManager();
 			AgentsManager = new AgentsManager();
 			SelectionManager = new SelectionManager();
