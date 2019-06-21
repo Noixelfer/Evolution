@@ -42,16 +42,13 @@ namespace Evolution.Actions
 			startTime = Time.time;
 			targetPos = invalidVector;
 			searchCanceled = false;
-			//ThreadPool.QueueUserWorkItem((_) => SearchForPath(posX, posY));
 			SearchForPathAsync(posX, posY);
 		}
 
 		private async void SearchForPathAsync(int posX, int posY)
 		{
-			Debug.Log("SearchForPathAsyncStarted");
 			Task t = Task.Run(async () => SearchForPath(posX, posY));
 			await t;
-			Debug.Log("SearchForPathAsyncDone");
 		}
 
 		private void SearchForPath(int posX, int posY)

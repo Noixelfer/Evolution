@@ -31,7 +31,7 @@ namespace Evolution.Actions
 			harvestTime -= time;
 			if (harvestTime <= 0)
 			{
-				agent.Inventory.AddItem(resultingItem, quantity);
+				agent.Inventory.AddItem(resultingItem.ID, resultingItem, quantity);
 				return ActionStatus.SUCCESSFULLY_EXECUTED;
 			}
 			return ActionStatus.IN_PROGRESS;

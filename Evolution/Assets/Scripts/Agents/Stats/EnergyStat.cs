@@ -9,9 +9,11 @@ namespace Evolution.Character
 			MinValue = minValue;
 			MaxValue = maxValue;
 			Value = MaxValue;
+			percentage = 1;
 		}
 
 		private float currentEnergy = 0;
+		private float percentage;
 		private readonly float regenerationRate = -1 / (Constants.SECONDS_IN_A_DAY * 4);
 
 		public override string Name { get; } = "Energy";
@@ -24,7 +26,10 @@ namespace Evolution.Character
 			protected set
 			{
 				if (currentEnergy != value)
+				{
 					currentEnergy = Mathf.Clamp(value, MinValue, MaxValue);
+					percentage = currentEnergy / MaxValue;
+				}
 			}
 		}
 
@@ -33,7 +38,7 @@ namespace Evolution.Character
 			Value += amount;
 		}
 
-		public override float Percentage => Value / (MaxValue - MinValue);
+		public override float Percentage => percentage;
 
 		public override void UpdateStat(float deltaTime)
 		{

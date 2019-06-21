@@ -4,5 +4,6 @@
 	{
 		string Icon { get; }
 		float Weight { get; }
+		string ID { get; }
 	}
 }

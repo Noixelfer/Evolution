@@ -12,7 +12,7 @@ namespace Evolution.Resourcess
 
 		public override List<IAction> GetPossibleActions(Agent agent)
 		{
-			var stone = new BaseItem(new ItemDefinition(0.7f, 0.5f));
+			var stone = new ResourceItem(new ItemDefinition(0.7f, 0.5f), ItemsUtils.STONE_ID);
 			stone.ItemDefinition.Name = "stone";
 			var harvestAction = new HarvestNaturalResource(agent, "Mining stone", stone, 2, Constants.MINE_TIME);
 			return new List<IAction>() { harvestAction };

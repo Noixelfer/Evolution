@@ -1,15 +1,15 @@
 ﻿namespace Evolution.Items
 {
-	public class BaseEdibleItem : IItem
+	public class BaseEdibleItem : BaseItem
 	{
-		public BaseEdibleItem(ItemDefinition itemDefinition, float hungerRestored)
+		public BaseEdibleItem(ItemDefinition itemDefinition, float hungerRestored, string id) : base(itemDefinition)
 		{
-			ItemDefinition = itemDefinition;
 			HungerRestored = hungerRestored;
+			ID = id;
 		}
-		public ItemDefinition ItemDefinition;
+
 		public float HungerRestored;
-		public string Icon => "";
-		public float Weight => ItemDefinition.Weight;
+
+		public override string ID { get; protected set; }
 	}
 }

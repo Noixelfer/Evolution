@@ -12,7 +12,7 @@ namespace Evolution.Resourcess
 
 		public override List<IAction> GetPossibleActions(Agent agent)
 		{
-			var apple = new BaseEdibleItem(new ItemDefinition(0.2f, 0.1f), 25);
+			var apple = new BaseEdibleItem(new ItemDefinition(0.2f, 0.1f), 25, ItemsUtils.APPLE_ID);
 			apple.ItemDefinition.Name = "apple";
 			var harvestAction = new HarvestNaturalResource(agent, "Collecting apples", apple, 4, Constants.COLLECT_APPLE_TIME);
 			harvestAction.Effects = new HashSet<string>() { ActionEffects.OBTAINS_FOOD };

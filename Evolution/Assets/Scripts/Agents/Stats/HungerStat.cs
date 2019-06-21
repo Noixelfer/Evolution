@@ -11,9 +11,12 @@ namespace Evolution.Character
 			MinValue = minValue;
 			MaxValue = maxValue;
 			Value = maxValue;
+			percentage = 1;
 		}
 
 		private float currentHunger = 0;
+		private float percentage;
+
 		public override float Value
 		{
 			get
@@ -23,7 +26,10 @@ namespace Evolution.Character
 			protected set
 			{
 				if (currentHunger != value)
+				{
 					currentHunger = Mathf.Clamp(value, MinValue, MaxValue);
+					percentage = currentHunger / MaxValue;
+				}
 			}
 		}
 		public override void ModifyValue(float amount)
@@ -36,6 +42,6 @@ namespace Evolution.Character
 			Value -= Constants.HUNGER_DECREASE_RATE * deltaTime;
 		}
 
-		public override float Percentage => Value / (MaxValue - MinValue);
+		public override float Percentage => percentage;
 	}
 }

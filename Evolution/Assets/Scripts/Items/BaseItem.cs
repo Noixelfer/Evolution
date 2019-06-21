@@ -1,6 +1,6 @@
 ﻿namespace Evolution.Items
 {
-	public class BaseItem : IItem
+	public abstract class BaseItem : IItem
 	{
 		public BaseItem(ItemDefinition itemDefinition)
 		{
@@ -9,5 +9,7 @@
 		public ItemDefinition ItemDefinition;
 		public string Icon => "";
 		public float Weight => ItemDefinition.Weight;
+
+		public abstract string ID { get; protected set; }
 	}
 }

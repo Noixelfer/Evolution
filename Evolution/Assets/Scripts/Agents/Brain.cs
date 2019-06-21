@@ -191,7 +191,7 @@ namespace Evolution.Character
 			//Pick an action from best actions
 			var pickedAction = ChooseAction(possbileActions);
 
-			if ((agent.Transform.position - pickedAction.Interactable.gameObject.transform.position).sqrMagnitude >= 3f)
+			if ((agent.Transform.position - pickedAction.Interactable.gameObject.transform.position).sqrMagnitude >= 2.5f)
 			{
 				//Get the closest free tile from our current interractable
 				minDistance = 100000;
@@ -315,10 +315,15 @@ namespace Evolution.Character
 			//He will always be able to sleep
 			var sleepTime = 5 * Constants.HOUR_IN_SECONDS;
 			availableActions.Add(new ActionScore(new Sleep(agent, sleepTime), agent));
-			foreach (var item in agent.Inventory.GetItemsOfType<BaseEdibleItem>())
+			foreach (var edibleItemId in ItemsUtils.EDDDIBLE_ITEMS)
 			{
-				var action = new Eat(agent, item.Key, 0.4f * Constants.HOUR_IN_SECONDS);
-				availableActions.Add(new ActionScore(action, agent));
+				var item = agent.Inventory.GetItem(edibleItemId);
+				if (item.Item1 != null)
+				{
+					var action = new Eat(agent, (BaseEdibleItem)item.Item1, 0.4f * Constants.HOUR_IN_SECONDS);
+					availableActions.Add(new ActionScore(action, agent));
+					break;
+				}
 			}
 			return availableActions;
 		}
