@@ -14,19 +14,36 @@ namespace Evolution.Resourcess
 		private readonly float appleGenerationRadius = 0.3f;
 		private const int MAX_NUMBER_OF_APPLES = 7;
 		private HashSet<GrowingResource> apples = new HashSet<GrowingResource>();
+		private bool IsAppleTree = false;
+		private float lastGenerateAppleTime = 0;
 
 		public override List<IAction> GetPossibleActions(Agent agent)
 		{
-			if (apples.Count == 0)
+			if (!IsAppleTree || apples.Count == 0)
 				return new List<IAction>();
-			var harvestAction = new HarvestNaturalResource(agent, "Collecting apples", 4, Constants.COLLECT_APPLE_TIME, GetApple);
+			var harvestAction = new HarvestNaturalResource(agent, "Collecting apples", 4, Constants.COLLECT_APPLE_TIME, GetApple, IsResourceAvialbe);
 			harvestAction.Effects = new HashSet<string>() { ActionEffects.OBTAINS_FOOD };
 			return new List<IAction>() { harvestAction };
 		}
 
 		private void Start()
 		{
-			GenerateApples();
+			if (Random.Range(0f, 1f) < Constants.APPLE_TREE_AMMOUNT)
+				IsAppleTree = true;
+			if (IsAppleTree)
+				GenerateApples();
+		}
+
+		private void Update()
+		{
+			if (IsAppleTree)
+				if ((Time.time - lastGenerateAppleTime) * Constants.REAL_TIME_MULTIPLIER >= Constants.APPLE_GROW_TIME && apples.Count < MAX_NUMBER_OF_APPLES)
+					GenerateApple();
+		}
+
+		private bool IsResourceAvialbe()
+		{
+			return apples.Count > 0;
 		}
 
 		private IItem GetApple()
@@ -78,6 +95,7 @@ namespace Evolution.Resourcess
 			var applePrefab = Game.Instance.PrefabsManager.GetPrefab<GrowingResource>("apple");
 			var appleInstance = Instantiate(applePrefab, transform.position + newPosition, Quaternion.identity, transform);
 			apples.Add(appleInstance);
+			lastGenerateAppleTime = Time.time;
 		}
 	}
 }

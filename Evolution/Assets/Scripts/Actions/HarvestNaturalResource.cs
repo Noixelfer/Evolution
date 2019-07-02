@@ -7,12 +7,13 @@ namespace Evolution.Actions
 	public class HarvestNaturalResource : BaseAction
 	{
 		public override string ID => "";
+		public bool ResourceAvailable = true;
 		private Agent agent;
 		private float harvestTime;
 		private int quantity;
 		private Func<IItem> actionResult;
 
-		public HarvestNaturalResource(Agent agent, string actionDescription, int quantity, float harvestTime, Func<IItem> GetActionResultingItem)
+		public HarvestNaturalResource(Agent agent, string actionDescription, int quantity, float harvestTime, Func<IItem> GetActionResultingItem, Func<bool> IsResourceAvailab)
 		{
 			this.agent = agent;
 			Description = actionDescription;
@@ -40,6 +41,8 @@ namespace Evolution.Actions
 				}
 
 			}
+			if (!ResourceAvailable)
+				return ActionStatus.FAILED;
 			return ActionStatus.IN_PROGRESS;
 		}
 

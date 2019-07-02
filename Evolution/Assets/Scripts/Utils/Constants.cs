@@ -30,6 +30,9 @@ namespace Evolution
 		public static readonly float ENERGY_DECREASE_RATE = 1 / (4 * SECONDS_IN_A_DAY);
 		public static readonly float ENERGY_REGEN_RESTING = 1 / (7 * HOUR_IN_SECONDS);
 
+		//Resources
+		public static float APPLE_TREE_AMMOUNT = 0.25f;
+		public static float APPLE_GROW_TIME = 2 * SECONDS_IN_A_DAY;
 
 		//Axis
 		public static readonly string MOUSE_SCROLLWHEEL_AXIS = "Mouse ScrollWheel";

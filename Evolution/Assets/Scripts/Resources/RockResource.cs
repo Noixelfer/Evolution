@@ -14,7 +14,7 @@ namespace Evolution.Resourcess
 		{
 			var stone = new ResourceItem(new ItemDefinition(0.7f, 0.5f), ItemsUtils.STONE_ID);
 			stone.ItemDefinition.Name = "stone";
-			var harvestAction = new HarvestNaturalResource(agent, "Mining stone", 2, Constants.MINE_TIME, () => stone);
+			var harvestAction = new HarvestNaturalResource(agent, "Mining stone", 2, Constants.MINE_TIME, () => stone, () => true);
 			return new List<IAction>() { harvestAction };
 		}
 	}

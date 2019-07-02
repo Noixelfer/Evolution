@@ -956,5 +956,30 @@ PrefabInstance:
       propertyPath: m_isInputParsingRequired
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4083080536474498865, guid: cbf196df914d0164eaa2f3bac3315194,
+        type: 3}
+      propertyPath: m_margin.w
+      value: 5.48834
+      objectReference: {fileID: 0}
+    - target: {fileID: 4083080536474498865, guid: cbf196df914d0164eaa2f3bac3315194,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4083080536474498865, guid: cbf196df914d0164eaa2f3bac3315194,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4083080536169894532, guid: cbf196df914d0164eaa2f3bac3315194,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 97.66
+      objectReference: {fileID: 0}
+    - target: {fileID: 4083080536169894532, guid: cbf196df914d0164eaa2f3bac3315194,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 75.36
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cbf196df914d0164eaa2f3bac3315194, type: 3}
