@@ -170,7 +170,7 @@ namespace Evolution.Character
 					continue;
 				if (!interactablesType.Contains(interactable.ID))
 				{
-					interactablesType.Add(interactable.ID);
+					//interactablesType.Add(interactable.ID);
 					if (knownInteractables.Contains(interactable.ID))
 					{
 						//We already know this type of interactable, we have to add the possible actions for it
