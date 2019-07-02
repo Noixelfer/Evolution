@@ -3,18 +3,20 @@ namespace Evolution
 {
 	public class Constants : MonoBehaviour
 	{
-		public static readonly float HOUR_IN_SECONDS = 5;
-		public static readonly float SECONDS_IN_A_DAY = 24 * HOUR_IN_SECONDS;
-		public static readonly float SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
-		public static readonly float SECONDS_IN_A_YEAR = 360 * SECONDS_IN_A_DAY;
+		//-----------------------------VALUES THAT CAN BE CHANGED IN OPTIONS
+		public static int REAL_TIME_MULTIPLIER = 200;
+		public static int HOUR_IN_SECONDS = 5;
+		public static int HOURS_IN_A_DAY = 24;
+		public static int DAYS_IN_A_MONTH = 30;
+		public static int DAYS_IN_A_YEAR = 360;
 
-		//-------------------------------------EDITOR------------------------------------------------------------------------------------
-		public float RealTimeMultiplier = 1000;
 
+		//------------------------------VALUES IN SECONDS-----------------------------------------------
+		public static readonly float SECONDS_IN_A_DAY = HOURS_IN_A_DAY * HOUR_IN_SECONDS;
+		public static readonly float SECONDS_IN_A_MONTH = DAYS_IN_A_MONTH * SECONDS_IN_A_DAY;
+		public static readonly float SECONDS_IN_A_YEAR = DAYS_IN_A_YEAR * SECONDS_IN_A_DAY;
 
 		//--------------------------------------------------------------------------------------------------------------------------------------------------------------
-		//How much faster time passes comparead to real world time
-		public static float REAL_TIME_MULTIPLIER = 200;
 		public static readonly float AGENT_SPEED_HOUR = 10 / (HOUR_IN_SECONDS);
 		public static readonly float COLLECT_APPLE_TIME = 1 * HOUR_IN_SECONDS;
 		public static readonly float MINE_TIME = 1 * HOUR_IN_SECONDS;
@@ -33,10 +35,5 @@ namespace Evolution
 		public static readonly string MOUSE_SCROLLWHEEL_AXIS = "Mouse ScrollWheel";
 		public static readonly string HORIZONTAL_AXIS = "Horizontal";
 		public static readonly string VERTICAL_AXIS = "Vertical";
-
-		private void Update()
-		{
-			REAL_TIME_MULTIPLIER = RealTimeMultiplier;
-		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using Evolution.Actions;
 using Evolution.Character;
 using Evolution.Map;
+using Evolution.UI;
 using Evolution.Utils;
 using System.Collections;
 using System.Threading;
@@ -37,6 +38,8 @@ namespace Evolution
 		public SelectionManager SelectionManager;
 		public InteractablesManager InteractablesManager;
 		public InputManager InputManager;
+		public UIManager UIManager;
+		public AudioSource GameSound;
 		public int MAP_SIZE = 100;
 
 		private void Awake()
@@ -48,6 +51,7 @@ namespace Evolution
 			AgentsManager = new AgentsManager();
 			SelectionManager = new SelectionManager();
 			InputManager = new InputManager();
+			UIManager = new UIManager();
 
 			MapManager = Utility.AddComponentIfNotExisting<MapManager>(gameObject);
 			ActionsManager = Utility.AddComponentIfNotExisting<ActionsManager>(gameObject);
@@ -58,7 +62,7 @@ namespace Evolution
 
 		private void Update()
 		{
-			InputManager.Update();	
+			InputManager.Update();
 		}
 
 		public void RunCoroutine(IEnumerator enumerator)
