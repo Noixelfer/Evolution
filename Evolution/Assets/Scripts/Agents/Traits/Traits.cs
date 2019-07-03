@@ -42,5 +42,20 @@ namespace Evolution.Character
 			}
 			return traits;
 		}
+
+		public static Dictionary<string, Trait> GetTraitsFromParents(Agent agent1, Agent agent2, float mutationChace = 0.1f)
+		{
+			var traits = new Dictionary<string, Trait>();
+			foreach (var trait in AllTraits)
+			{
+				var newTrait = new Trait(trait.Value.Name, trait.Value.OppositeTrait);
+				if (Random.Range(0f, 1f) > mutationChace)
+					newTrait.Percentage = (agent1.CharacterTraits[trait.Key].Percentage + agent2.CharacterTraits[trait.Key].Percentage) / 2;
+				else
+					newTrait.Percentage = Random.Range(0f, 1f);
+				traits.Add(newTrait.Name, newTrait);
+			}
+			return traits;
+		}
 	}
 }

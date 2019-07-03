@@ -49,6 +49,7 @@ namespace Evolution.Map
 			//Create the MapGraph for our current Map
 			MapGraph = new MapGraph(Map);
 			Game.Instance?.InteractablesManager?.DisableUnreachableIInteractables();
+			Game.Instance.SelectionManager.SelectNextAgent();
 		}
 
 		private float[,] GetNoiseMap(int width, int height, float scale)
@@ -175,6 +176,7 @@ namespace Evolution.Map
 				}
 
 				var agent = Instantiate(Game.Instance.PrefabsManager.GetPrefab<Agent>("female_agent"));
+				agent.StatsManager.Age.SetAge(Random.Range(14, 25), 0, 0);
 				agent.transform.position = new Vector3(tileX, tileY, 0);
 				if (agentsContainer == null)
 				{

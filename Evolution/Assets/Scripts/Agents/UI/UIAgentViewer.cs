@@ -9,6 +9,9 @@ namespace Evolution.UI
 		public TextMeshProUGUI Name;
 		public TextMeshProUGUI Age;
 		public GameObject Traits;
+		private float UPDATE_UI_TIME = 0.1f;
+		private float lastUpdateTime = 0;
+		private Agent cachedAgent = null;
 
 		public void ShowAgent(Agent agent)
 		{
@@ -19,11 +22,20 @@ namespace Evolution.UI
 			}
 
 			Name.text = agent.Name;
-			Age.text = agent.StatsManager.Age.GetAge().Years.ToString() + " years old";
-
+			Age.text = agent.StatsManager.Age.GetAge().ToString();
+			cachedAgent = agent;
 			DisplayTraits(agent);
 		}
 
+		private void FixedUpdate()
+		{
+			if (cachedAgent != null)
+				if (Time.time - lastUpdateTime >= UPDATE_UI_TIME)
+				{
+					Age.text = cachedAgent.StatsManager.Age.GetAge().ToString();
+					lastUpdateTime = Time.time;
+				}
+		}
 		private void DisplayTraits(Agent agent)
 		{
 			foreach (Transform go in Traits.transform)

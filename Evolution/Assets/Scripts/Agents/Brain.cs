@@ -226,7 +226,7 @@ namespace Evolution.Character
 					if (pickedAction.Interactable is Agent)
 					{
 						var receiverAgent = (Agent)pickedAction.Interactable;
-						var askForInteraction = new AskForInteractPermission(agent, (Agent)pickedAction.Interactable);
+						var askForInteraction = new AskForInteractPermission(agent, (Agent)pickedAction.Interactable, pickedAction.Action);
 						askForInteraction.OnEndAction += () => moveAction.OnFailedAction += () => receiverAgent?.StopWaiting(agent);
 						actionsToExecute.Push(askForInteraction);
 					}

@@ -33,6 +33,12 @@ namespace Evolution.UI
 			SoundToggle?.onValueChanged.AddListener(OnSoundTogglePressed);
 			Exit?.onClick.AddListener(ExitSettings);
 
+			OnRealTimeMultiplierChanged(realTimeMultiplier.ToString());
+			OnHourInSecondsChanged(hourInSeconds.ToString());
+			OnDayInHoursChanged(dayInHours.ToString());
+			OnMonthInDaysInputChanged(monthInDays.ToString());
+			OnYearInDaysInputChanged(yearInDays.ToString());
+
 			if (RealTimeMultiplierInputField != null)
 				RealTimeMultiplierInputField.text = realTimeMultiplier.ToString();
 			if (YearInDaysInputField != null)
@@ -81,10 +87,11 @@ namespace Evolution.UI
 		{
 			if (int.TryParse(newValue, out var result))
 			{
-				result = Mathf.Clamp(result, 1, 3650);
+				result = Mathf.Clamp(result, 36, 3650);
 				yearInDays = result;
 				Constants.DAYS_IN_A_YEAR = result;
 				YearInDaysInputField.text = result.ToString();
+				OnMonthInDaysInputChanged(monthInDays.ToString());
 			}
 		}
 
@@ -92,7 +99,7 @@ namespace Evolution.UI
 		{
 			if (int.TryParse(newValue, out var result))
 			{
-				result = Mathf.Clamp(result, 1, yearInDays);
+				result = Mathf.Clamp(result, Mathf.Min(10, yearInDays), yearInDays);
 				monthInDays = result;
 				Constants.DAYS_IN_A_MONTH = result;
 				MonthInDaysInputField.text = result.ToString();
@@ -103,7 +110,7 @@ namespace Evolution.UI
 		{
 			if (int.TryParse(newValue, out var result))
 			{
-				result = Mathf.Clamp(result, 1, 1000);
+				result = Mathf.Clamp(result, 4, 1000);
 				dayInHours = result;
 				Constants.HOURS_IN_A_DAY = result;
 				DayInHoursInputField.text = result.ToString();
@@ -114,7 +121,7 @@ namespace Evolution.UI
 		{
 			if (int.TryParse(newValue, out var result))
 			{
-				result = Mathf.Clamp(result, 1, 36000);
+				result = Mathf.Clamp(result, 200, 36000);
 				hourInSeconds = result;
 				Constants.HOUR_IN_SECONDS = result;
 				HourInSecondsInputField.text = result.ToString();

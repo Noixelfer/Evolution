@@ -9,16 +9,18 @@ namespace Evolution.Actions
 		private bool canInterract = false;
 		private readonly Agent requester;
 		private readonly Agent receiver;
+		private readonly IAction action;
 
-		public AskForInteractPermission(Agent requester, Agent receiver)
+		public AskForInteractPermission(Agent requester, Agent receiver, IAction action)
 		{
 			this.requester = requester;
 			this.receiver = receiver;
+			this.action = action;
 		}
 
 		public override ActionStatus OnUpdate(float time)
 		{
-			canInterract = receiver.RelationController.RespondToSocialRequest(requester);
+			canInterract = receiver.RelationController.RespondToSocialRequest(requester, action);
 			if (canInterract)
 			{
 				Debug.Log("Interact permission was accpted");

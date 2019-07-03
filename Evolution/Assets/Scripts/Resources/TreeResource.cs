@@ -61,7 +61,7 @@ namespace Evolution.Resourcess
 			}
 			apples.Remove(collectedApple);
 			collectedApple.gameObject.SetActive(false);
-			var apple = new BaseEdibleItem(new ItemDefinition(0.2f, 0.1f), 25, ItemsUtils.APPLE_ID);
+			var apple = new BaseEdibleItem(new ItemDefinition(0.2f, 0.1f), Constants.MAXIMUM_HUNGER / 4, ItemsUtils.APPLE_ID);
 			apple.ItemDefinition.Name = "apple";
 			return apple;
 		}

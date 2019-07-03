@@ -11,9 +11,9 @@
 		public StatsManager(Agent owner)
 		{
 			Owner = owner;
-			Hunger = new HungerStat(owner, 200);
+			Hunger = new HungerStat(owner, Constants.MAXIMUM_HUNGER);
 			Stamina = new StaminaStat(owner, 140);
-			Energy = new EnergyStat(owner, 300);
+			Energy = new EnergyStat(owner, Constants.MAXIMUM_ENERGY);
 			Age = new AgeStat(owner);
 		}
 

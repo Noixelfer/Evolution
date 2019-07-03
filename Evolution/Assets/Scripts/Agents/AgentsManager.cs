@@ -26,5 +26,13 @@ namespace Evolution.Character
 			allAgents.Add(currentID, agent);
 			currentID++;
 		}
+
+		public void Unregister(Agent agent)
+		{
+			if (agent == null)
+				return;
+			if (allAgents.ContainsKey(agent.AGENT_ID))
+				allAgents.Remove(agent.AGENT_ID);
+		}
 	}
 }

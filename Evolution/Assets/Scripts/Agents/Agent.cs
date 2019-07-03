@@ -19,10 +19,11 @@ namespace Evolution.Character
 		public Transform Transform => transform;
 		public IBrain Brain => brain;
 		public Inventory Inventory;
-		public Dictionary<string, Trait> CharacterTraits { get; protected set; } = new Dictionary<string, Trait>();
+		public Dictionary<string, Trait> CharacterTraits { get; set; } = new Dictionary<string, Trait>();
 		public StatsManager StatsManager;
 		public RelationController RelationController;
 		public UIAgentStatus UIAgentStatus;
+		public BreedController BreedController;
 
 		private Brain brain;
 		private string name => "Agent " + AGENT_ID;
@@ -35,6 +36,7 @@ namespace Evolution.Character
 			this.CharacterTraits = Traits.GetRandomTraits();
 			StatsManager = new StatsManager(this);
 			RelationController = new RelationController(this, brain);
+			BreedController = new BreedController(this);
 			UIAgentStatus = GetComponentInChildren<UIAgentStatus>();
 			Inventory = new Inventory(this);
 			if (Game.Instance.SelectionManager.SelectedAgent == null)
@@ -51,9 +53,10 @@ namespace Evolution.Character
 		public void Die(string causeOfDeath)
 		{
 			//TODO : Actual death logic
-			var deathText = "Agent " + Name + " died at the age " + StatsManager.Age.GetAge().ToString() + ". Cause of death: " + causeOfDeath;
+			var deathText = Name + " died at the age " + StatsManager.Age.GetAge().ToString() + ". Cause of death: " + causeOfDeath;
 			Game.Instance.UIManager?.UILog?.AddLog(deathText, UI.Event.DIED);
 			Debug.Log(deathText);
+			Game.Instance.AgentsManager.Unregister(this);
 			gameObject.SetActive(false);
 		}
 
@@ -61,6 +64,8 @@ namespace Evolution.Character
 		{
 			var possibleActions = new List<IAction>();
 			possibleActions.Add(new Talk(agent, this));
+			if (BreedController.CanBreed() && agent.BreedController.CanBreed())
+				possibleActions.Add(new Breed(agent, this));
 			return possibleActions;
 		}
 

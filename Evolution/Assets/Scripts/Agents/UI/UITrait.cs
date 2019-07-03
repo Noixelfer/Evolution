@@ -24,7 +24,8 @@ namespace Evolution.UI
 		public void SetPercentage(float percentage)
 		{
 			percentage = Mathf.Clamp(percentage, 0, 1);
-			fillImage.fillAmount = percentage;
+			if (fillImage != null)
+				fillImage.fillAmount = percentage;
 		}
 	}
 }

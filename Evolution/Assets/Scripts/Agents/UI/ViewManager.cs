@@ -10,7 +10,7 @@ namespace Evolution.UI
 		private void Awake()
 		{
 			Canvas = GameObject.Find("Canvas");
-			UIAgentViewer = Canvas.GetComponentInChildren<UIAgentViewer>();
+			UIAgentViewer = Canvas.GetComponentInChildren<UIAgentViewer>(true);
 		}
 
 		private void Start()

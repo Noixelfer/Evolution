@@ -23,7 +23,30 @@ namespace Evolution.Character
 			friendshipLevels[other] = Mathf.Clamp(friendshipLevels[other] + value, -1, 1);
 		}
 
-		public bool RespondToSocialRequest(Agent other)
+		public bool RespondToSocialRequest(Agent other, IAction action)
+		{
+			var response = false;
+			if (action != null)
+			{
+				if (action is Talk)
+					response = WantToTalkWithAgent(other);
+				else if (action is Breed)
+					response = WantToBreedWithAgent(other);
+			}
+
+			if (response.Equals(true))
+			{
+				//If we accepted the interact request, we need to drop our current actions and add a Wait action
+				var waitAgentAction = new Wait(other, 15f);
+				var actionsToExecute = new Stack<IAction>();
+				actionsToExecute.Push(waitAgentAction);
+				brain.SetCurretActions(actionsToExecute);
+			}
+
+			return response;
+		}
+
+		private bool WantToTalkWithAgent(Agent other)
 		{
 			var response = false;
 			if (!friendshipLevels.ContainsKey(other))
@@ -38,17 +61,12 @@ namespace Evolution.Character
 				var chance = Random.Range(0f, 1f);
 				response = (chance < SigmoidFunction(friendshipLevels[other]));
 			}
-
-			if (response.Equals(true))
-			{
-				//If we accepted the interact request, we need to drop our current actions and add a Wait action
-				var waitAgentAction = new Wait(other, 15f);
-				var actionsToExecute = new Stack<IAction>();
-				actionsToExecute.Push(waitAgentAction);
-				brain.SetCurretActions(actionsToExecute);
-			}
-
 			return response;
+		}
+
+		private bool WantToBreedWithAgent(Agent other)
+		{
+			return Random.Range(0f, 1f) < owner.BreedController.Compability(other);
 		}
 
 		private float SigmoidFunction(float x)
