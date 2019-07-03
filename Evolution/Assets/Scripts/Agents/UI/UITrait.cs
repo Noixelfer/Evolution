@@ -17,7 +17,8 @@ namespace Evolution.UI
 		}
 		public void SetName(string name)
 		{
-			traitName.text = name;
+			if (traitName != null)
+				traitName.text = name;
 		}
 
 		public void SetPercentage(float percentage)

@@ -7,6 +7,7 @@ namespace Evolution.UI
 	{
 		private UIMainMenu uiMainMenuCached;
 		private UISettingsPannel uiSettingsPannelCached;
+		private UILog uiLogCached;
 
 		public UIMainMenu UIMainMenu
 		{
@@ -25,6 +26,16 @@ namespace Evolution.UI
 				if (uiSettingsPannelCached == null)
 					uiSettingsPannelCached = Utils.Utility.FindObjectsOfTypeAll<UISettingsPannel>(true).FirstOrDefault();
 				return uiSettingsPannelCached;
+			}
+		}
+
+		public UILog UILog
+		{
+			get
+			{
+				if (uiLogCached == null)
+					uiLogCached = Utils.Utility.FindObjectsOfTypeAll<UILog>(true).FirstOrDefault();
+				return uiLogCached;
 			}
 		}
 	}

@@ -1,7 +1,6 @@
 ﻿using Evolution.Actions;
 using Evolution.Items;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Evolution.Character
@@ -52,7 +51,9 @@ namespace Evolution.Character
 		public void Die(string causeOfDeath)
 		{
 			//TODO : Actual death logic
-			Debug.Log("Agent " + Name + " died at the age " + StatsManager.Age.GetAge().ToString() + ". Cause of death: " + causeOfDeath);
+			var deathText = "Agent " + Name + " died at the age " + StatsManager.Age.GetAge().ToString() + ". Cause of death: " + causeOfDeath;
+			Game.Instance.UIManager?.UILog?.AddLog(deathText, UI.Event.DIED);
+			Debug.Log(deathText);
 			gameObject.SetActive(false);
 		}
 

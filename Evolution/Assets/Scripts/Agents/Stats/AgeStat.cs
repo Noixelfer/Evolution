@@ -68,6 +68,7 @@ namespace Evolution.Character
 
 		private void UpdateAge(ulong seconds)
 		{
+			var secondsInAYear = Constants.SECONDS_IN_A_YEAR;
 			Years = seconds / (ulong)Constants.SECONDS_IN_A_YEAR;
 			Months = (seconds - Years * (ulong)Constants.SECONDS_IN_A_YEAR) / (ulong)Constants.SECONDS_IN_A_MONTH;
 			Days = (seconds - Years * (ulong)Constants.SECONDS_IN_A_YEAR - Months * (ulong)Constants.SECONDS_IN_A_MONTH) / (ulong)Constants.SECONDS_IN_A_DAY;

@@ -40,6 +40,8 @@ namespace Evolution.Character
 		public override void UpdateStat(float deltaTime)
 		{
 			Value -= Constants.HUNGER_DECREASE_RATE * deltaTime;
+			if (Value <= 0)
+				Owner.Die("starved");
 		}
 
 		public override float Percentage => percentage;

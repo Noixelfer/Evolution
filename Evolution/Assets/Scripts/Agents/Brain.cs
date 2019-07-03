@@ -1,6 +1,7 @@
 ﻿using Evolution.Actions;
 using Evolution.Items;
 using Evolution.Map;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -185,8 +186,8 @@ namespace Evolution.Character
 					}
 				}
 			}
-
 			CalculateScoreForActions(possbileActions);
+			possbileActions.Add(MoveToAnotherPositionAction(possbileActions.Count));
 
 			//Pick an action from best actions
 			var pickedAction = ChooseAction(possbileActions);
@@ -237,12 +238,22 @@ namespace Evolution.Character
 			}
 		}
 
+		private ActionScore MoveToAnotherPositionAction(int count)
+		{
+			var action = new MoveToAnotherArea(agent);
+			var score = action.GetScoreBasedOnTraits();
+			var scoreBasedOnActionsCount = (1 - (Math.Min(4, count) / 4)) * 0.25f;
+			var actionScore = new ActionScore(action, agent);
+			actionScore.Score = Mathf.Clamp(score + UnityEngine.Random.Range(-0.12f, 0.12f) + scoreBasedOnActionsCount, 0, 1) + Needs.GetHungerNeed() * 0.4f;
+			return actionScore;
+		}
+
 		private void CalculateScoreForActions(HashSet<ActionScore> possibleActions)
 		{
 			foreach (var action in possibleActions)
 			{
 				action.Score = action.Action.GetScoreBasedOnTraits();
-				action.Score = Mathf.Clamp(action.Score + Random.Range(-0.12f, 0.12f), 0, 1);
+				action.Score = Mathf.Clamp(action.Score + UnityEngine.Random.Range(-0.12f, 0.12f), 0, 1);
 				//Add score for basic needs
 				if (action.Action.Effects.Contains(ActionEffects.RESTORE_HUNGER))
 					action.Score += Needs.GetHungerNeed();
@@ -275,7 +286,7 @@ namespace Evolution.Character
 				return null;
 			}
 
-			var randomIndice = Random.Range(0, bestActions.Count);
+			var randomIndice = UnityEngine.Random.Range(0, bestActions.Count);
 			return bestActions[randomIndice];
 		}
 

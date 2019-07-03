@@ -21,7 +21,7 @@ namespace Evolution.Resourcess
 		{
 			if (!IsAppleTree || apples.Count == 0)
 				return new List<IAction>();
-			var harvestAction = new HarvestNaturalResource(agent, "Collecting apples", 4, Constants.COLLECT_APPLE_TIME, GetApple, IsResourceAvialbe);
+			var harvestAction = new HarvestNaturalResource(agent, "Collecting apples", 1, Constants.COLLECT_APPLE_TIME, GetApple, IsResourceAvialbe);
 			harvestAction.Effects = new HashSet<string>() { ActionEffects.OBTAINS_FOOD };
 			return new List<IAction>() { harvestAction };
 		}
