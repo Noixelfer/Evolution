@@ -29,7 +29,7 @@ namespace Evolution
 		public static readonly float MINIMUM_BREED_AGE = 16f;
 		public static readonly float MAXIMUM_BREED_AGE = 50f;
 		public static readonly int MAXIMUM_NUMBER_OF_CHILDS = 4;
-		public static readonly int PAUSE_YEARS_BETWEEN_BREEDS = 2;
+		public static readonly int PAUSE_YEARS_BETWEEN_BREEDS = 1;
 		public static readonly float ENERGY_CRITICAL_TRESHOLD = 0.2f;
 		public static readonly float HUNGER_CRITICAL_TRESHOLD = 0.25f;
 		public static float HUNGER_DECREASE_RATE => MAXIMUM_HUNGER / (7f * SECONDS_IN_A_DAY);

@@ -30,6 +30,8 @@ namespace Evolution.Actions
 			agent.transform.parent = GameObject.Find("Agents Container").transform;
 			agent.CharacterTraits = Traits.GetTraitsFromParents(requester, receiver);
 			Game.Instance.UIManager.UILog.AddLog(agent.AGENT_ID + " was born from " + requester.AGENT_ID + " and " + receiver.AGENT_ID, UI.Event.BREED);
+			requester.BreedController.OnBreed();
+			receiver.BreedController.OnBreed();
 			return ActionStatus.SUCCESSFULLY_EXECUTED;
 		}
 
