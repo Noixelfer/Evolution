@@ -42,6 +42,20 @@ namespace Evolution
 			}
 		}
 
+		public void UpdateKey(IInteractable interactable, (int, int) oldKey, (int, int) newKey)
+		{
+			if (awkTreeInteractables.ContainsKey(oldKey))
+			{
+				if (awkTreeInteractables[oldKey].RemoveWhere(inter => inter.Item1.Equals(interactable)) != 0)
+				{
+					if (awkTreeInteractables.ContainsKey(newKey))
+						awkTreeInteractables[newKey].Add((interactable, interactable.gameObject.transform.position));
+					else
+						awkTreeInteractables.Add(newKey, new HashSet<(IInteractable, Vector3)>() { (interactable, interactable.gameObject.transform.position) });
+				}
+			}
+		}
+
 		public void Unregister(IInteractable interactable)
 		{
 			var key = ((int)(interactable.gameObject.transform.position.x), (int)(interactable.gameObject.transform.position.y));
