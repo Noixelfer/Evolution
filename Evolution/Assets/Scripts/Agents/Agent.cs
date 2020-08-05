@@ -17,6 +17,7 @@ namespace Evolution.Character
 				return name;
 			}
 		}
+
 		public Transform Transform => transform;
 		public IBrain Brain => brain;
 		public Inventory Inventory;
@@ -41,9 +42,6 @@ namespace Evolution.Character
 			BreedController = new BreedController(this);
 			UIAgentStatus = GetComponentInChildren<UIAgentStatus>();
 			Inventory = new Inventory(this);
-			if (Game.Instance.SelectionManager.SelectedAgent == null)
-				Game.Instance.SelectionManager.SelectNextAgent();
-			//moveTask.Execute();
 		}
 
 		private void Start()

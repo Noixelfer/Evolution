@@ -1,5 +1,6 @@
 ﻿using Evolution.Character;
 using Evolution.Resourcess;
+using System.Collections;
 using UnityEngine;
 
 namespace Evolution.Map
@@ -49,7 +50,7 @@ namespace Evolution.Map
 			//Create the MapGraph for our current Map
 			MapGraph = new MapGraph(Map);
 			Game.Instance?.InteractablesManager?.DisableUnreachableIInteractables();
-			Game.Instance.SelectionManager.SelectNextAgent();
+			StartCoroutine(SelectFirstAgent());
 		}
 
 		private float[,] GetNoiseMap(int width, int height, float scale)
@@ -199,6 +200,17 @@ namespace Evolution.Map
 		{
 			//if (Input.GetKeyDown(KeyCode.Space))
 			//	GenerateMap(50, 50);
+		}
+
+		private IEnumerator SelectFirstAgent()
+		{
+			yield return null;
+			yield return null;
+
+			if (Game.Instance.SelectionManager.SelectedAgent == null)
+			{
+				Game.Instance.SelectionManager.SelectNextAgent();
+			}
 		}
 	}
 }

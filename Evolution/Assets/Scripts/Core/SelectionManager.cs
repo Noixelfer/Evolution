@@ -1,5 +1,6 @@
 ﻿using Evolution.Character;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,7 +15,6 @@ namespace Evolution
 
 		public SelectionManager()
 		{
-			SelectNextAgent();
 		}
 
 		public void SelectNextAgent()
